@@ -1,0 +1,16 @@
+<preface id="introduction"><title>Introduction</title>
+<para>
+User access to an AIM104 board's functions is provided by a kernel level driver
+(module) via a number of character devices
+</para>
+
+<para>
+Additionally, there is a C shared library (libaim104) which provides
+a number of wrapper functions around the low level system calls.
+</para>
+
+<para>
+A set of Java classes (for use with J9, other JVMs, and GCJ) are provided.
+</para>
+
+</preface>

@@ -1,0 +1,299 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>AIM104 board modules</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Linux AIM104 drivers"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Kernel drivers"
+HREF="kernel.html"><LINK
+REL="PREVIOUS"
+TITLE="Kernel drivers"
+HREF="kernel.html"><LINK
+REL="NEXT"
+TITLE="Low level C interface"
+HREF="low-level-c-interface.html"></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux AIM104 drivers</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="kernel.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 1. Kernel drivers</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="low-level-c-interface.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="AIM104-BOARD-MODULE"
+>1.2. AIM104 board modules</A
+></H1
+><P
+>All the boards are accessed via character devices with major number 240.
+Each board module can handle up to 8 boards of the same type with a unique 
+minor number for each board.</P
+><P
+>Each board module (such as aim104-relay8.o and aim104-io16.o) accept the same
+module parameters and have largely similar character device interfaces.</P
+><P
+><DIV
+CLASS="TABLE"
+><A
+NAME="BOARD-MODULES-TABLE"
+></A
+><P
+><B
+>Table 1-1. Board modules</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><COL><COL><COL><COL><THEAD
+><TR
+><TH
+>Board</TH
+><TH
+>Module</TH
+><TH
+>Device node</TH
+><TH
+>Minor number</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+>AIM104-RELAY8/IN8</TD
+><TD
+>aim104-relay8.o</TD
+><TD
+>/dev/arcom/aim104/relay8/0 .. /dev/arcom/aim104/relay8/7</TD
+><TD
+>0 .. 7</TD
+></TR
+><TR
+><TD
+>AIM104-IN16</TD
+><TD
+>aim104-in16.o</TD
+><TD
+>/dev/arcom/aim104/in16/0 .. /dev/arcom/aim104/in16/7</TD
+><TD
+>8 .. 15</TD
+></TR
+><TR
+><TD
+>AIM104-OUT16</TD
+><TD
+>aim104-out16.o</TD
+><TD
+>/dev/arcom/aim104/out16/0 .. /dev/arcom/aim104/out16/7</TD
+><TD
+>16 .. 23</TD
+></TR
+><TR
+><TD
+>AIM104-IO32</TD
+><TD
+>aim104-io32.o</TD
+><TD
+>/dev/arcom/aim104/io32/0 .. /dev/arcom/aim104/io32/7</TD
+><TD
+>24 .. 31</TD
+></TR
+><TR
+><TD
+>AIM104-MULTI-IO</TD
+><TD
+>aim104-multi-io.o</TD
+><TD
+>/dev/arcom/aim104/multi-io/0 .. /dev/arcom/aim104/multi-io/7</TD
+><TD
+>32 .. 39</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+></P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="MODULE-PARAMETERS"
+>1.2.1. Module parameters</A
+></H2
+><P
+><DIV
+CLASS="TABLE"
+><A
+NAME="MODULE-PARAMETERS-TABLE"
+></A
+><P
+><B
+>Table 1-2. Module parameters</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><COL><COL><COL><THEAD
+><TR
+><TH
+>Parameter</TH
+><TH
+>Accepted value</TH
+><TH
+>Description</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+>io_base</TD
+><TD
+>Comma separated list of integers.</TD
+><TD
+>Base I/O address of each board.</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+></P
+><P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="LOADING-AIM104-RELAY8-MODULE-EXAMPLE"
+></A
+><P
+><B
+>Example 1-2. Loading the aim104-relay8.o module</B
+></P
+><P
+>If we have two AIM104-RELAY8/IN8 boards with base addresses jumpered
+at 180H and 184H.</P
+><P
+><KBD
+CLASS="USERINPUT"
+>insmod aim104-relay8 io_base=0x180,0x184</KBD
+></P
+></DIV
+>
+On some non-x86 platforms it is necessary to offset the
+address by some amount in order to access the ISA I/O address
+space. Please consult the relevant Quick Start manual.</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="kernel.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="low-level-c-interface.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Kernel drivers</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="kernel.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Low level C interface</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

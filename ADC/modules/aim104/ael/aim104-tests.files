@@ -1,0 +1,10 @@
+usr/bin/test_aim104-relay8
+usr/bin/test_aim104-in16
+usr/bin/test_aim104-out16
+usr/bin/test_aim104-io32
+usr/bin/test_aim104-multi-io
+usr/bin/test_libaim104-relay8
+usr/bin/test_libaim104-in16
+usr/bin/test_libaim104-out16
+usr/bin/test_libaim104-io32
+usr/bin/test_libaim104-multi-io

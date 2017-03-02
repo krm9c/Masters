@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>AIM104-MULTI-IO</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Linux AIM104 drivers"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="libaim104"
+HREF="libaim104.html"><LINK
+REL="PREVIOUS"
+TITLE="AIM104-IO32"
+HREF="libaim104-io32.html"><LINK
+REL="NEXT"
+TITLE="Java classes"
+HREF="java.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux AIM104 drivers</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="libaim104-io32.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="java.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="LIBAIM104-MULTI-IO"
+></A
+>AIM104-MULTI-IO</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN413"
+></A
+><H2
+>Name</H2
+>aim104_multi_io_inputs, aim104_multi_io_ADC, aim104_multi_io_DAC&nbsp;--&nbsp;access an AIM104-MULTI-IO board</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN418"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN419"
+></A
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>#include &lt;arcom/libaim104.h&gt;</PRE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int aim104_multi_io_inputs</CODE
+>(int fd);</CODE
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int aim104_multi_io_ADC</CODE
+>(int fd, int channel, int single_ended);</CODE
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int aim104_multi_io_DAC</CODE
+>(int fd, int channel, unsigned short output);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN444"
+></A
+><H2
+>Description</H2
+><P
+><CODE
+CLASS="FUNCTION"
+>aim104_multi_io_inputs()</CODE
+> returns the status of the 8
+digital input lines.</P
+><P
+><CODE
+CLASS="FUNCTION"
+>aim104_multi_io_ADC()</CODE
+> return a value read from one of the
+ADC inputs. For an ADC input connected in single ended mode
+<CODE
+CLASS="VARNAME"
+>single_ended</CODE
+> must be set to true/non-zero and
+<CODE
+CLASS="VARNAME"
+>channel</CODE
+> must be between 0 and 15 inclusive.  For an ADC
+input connected in differential mode <CODE
+CLASS="VARNAME"
+>single_ended</CODE
+> must be
+set to false/zero and <CODE
+CLASS="VARNAME"
+>channel</CODE
+> must be between 0 and 7
+inclusive.</P
+><P
+><CODE
+CLASS="FUNCTION"
+>aim104_multi_io_DAC()</CODE
+> writes the 12 bit unsigned value
+(0-4095) <CODE
+CLASS="VARNAME"
+>output</CODE
+> to DAC <CODE
+CLASS="VARNAME"
+>channel</CODE
+> 0 or 1.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN458"
+></A
+><H2
+>Return Values</H2
+><P
+>All functions return 0 or an 8 bit unsigned value on success.  A negative
+value is returned when an error occurs.</P
+><P
+>The error codes are:</P
+><PRE
+CLASS="PROGRAMLISTING"
+>enum {
+    AIM104_SUCCESS = 0,        /* Success -- no error occurred. */
+    AIM104_EBAD_CHANNEL = -10, /* channel was not 0, 1, 2, or 3. */
+    AIM104_EIO = -20,          /* Low level I/O error -- check errno for details. */
+    AIM104_ERANGE = -30,       /* Value to write to DAC was greater than 4095. */
+};</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="libaim104-io32.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="java.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>AIM104-IO32</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="libaim104.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Java classes</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

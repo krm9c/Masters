@@ -1,0 +1,122 @@
+#! /usr/bin/make -f 
+KPKG_DEST_DIR ?= ..
+
+UPSTREAM := $(shell ael_changelog --upstream)
+
+ifeq ($(KDREV),)
+VERSION := $(shell ael_changelog --version)
+else
+VERSION := $(shell ael_changelog --version)+$(KDREV)
+endif
+
+CROSS := $(shell ael_build_config AEL_BUILD_CROSS_TOOLS_PREFIX)
+
+JAR := jar
+
+P_SRC := ael/aim104-source-$(UPSTREAM)
+P_J9_SRC := ael/j9-aim104-source-$(UPSTREAM)
+
+ARCH := $(shell ael_build_config AEL_TARGET_CPU)
+CROSS := $(shell ael_build_config AEL_BUILD_CROSS_TOOLS_PREFIX)
+
+build: ael/stamp-build
+ael/stamp-build:
+	ael_testdir
+	@if [ ! -f $(JAVA_HOME)/include/jni.h ] ; then			\
+		echo "*** This package requires that the JAVA_HOME" ; 	\
+		echo "*** environment variable points to a suitable" ; 	\
+		echo "*** Java SDK such that \$$JAVA_HOME/include/jni.h" ;\
+		echo "*** is available." ;				\
+		exit 1 ;						\
+	fi
+	$(MAKE) CC=$(CROSS)gcc lib lib-java test-lib test-modules
+	touch ael/stamp-build
+
+clean:
+	ael_testdir
+	ael_testroot
+	-rm -f ael/stamp-build ael/stamp-kdist-build
+	-rm -rf $(P_J9_SRC).tmp
+	-$(MAKE) dist-clean
+	ael_clean
+
+binary: binary-arch binary-indep
+
+binary-arch: ael/stamp-build
+	ael_testdir
+	ael_testroot
+	ael_clean -a -d
+	$(MAKE) CC=$(CROSS)gcc DESTDIR=$(shell pwd)/ael/tmp install
+	ael_movefiles -a
+	./mkdevs.sh ael/aim104-common
+	ael_strip -a
+	ael_build_package -a
+
+binary-indep:
+	ael_testdir
+	ael_testroot
+	ael_clean -i -d
+# Install directories
+	install -d $(P_SRC)/usr/src/modules/aim104
+# Install files
+	find . \( -path ./$(P_SRC) -o -name 'tmp*' -o -name 'CVS' \) -prune -o -name '*' -print | \
+	  cpio -admp $(P_SRC)/usr/src/modules/aim104
+	cd $(P_SRC)/usr/src/modules/aim104 && \
+	  $(MAKE) -f ael/rules clean
+	chown -R root.root $(P_SRC)/usr/src
+	find $(P_SRC) -type d | xargs chmod 775
+	find $(P_SRC) -type f -perm -100 | xargs chmod 775
+	find $(P_SRC) -type f -not -perm -100 | xargs chmod 664
+	cd $(P_SRC)/usr/src/ && \
+	  tar cf modules/aim104-$(UPSTREAM).tar modules/aim104 && \
+	  $(RM) -r modules/aim104
+	gzip -9 $(P_SRC)/usr/src/modules/aim104-$(UPSTREAM).tar
+# fix permissions
+	chown -R root.root $(P_SRC)
+	chmod -R g-ws $(P_SRC)	
+# Java source
+	install -d $(P_J9_SRC)/usr/src
+	install -d $(P_J9_SRC).tmp/com/arcom/aim104
+	set -e ; cd java/com/arcom/aim104 ; for I in *.java ; do \
+		install $${I} $(shell pwd)/$(P_J9_SRC).tmp/com/arcom/aim104/$${I} ; \
+	done
+	( cd $(P_J9_SRC).tmp/ ; $(JAR) cf $(shell pwd)/$(P_J9_SRC)/usr/src/aim104_src_$(UPSTREAM).jar com )
+	ael_build_package -i
+
+#
+# ael-kernel-package modules support
+#
+
+ifeq ($(filter 2.4.%,$(KVERS)),)
+MODULE_TGT := modules26
+else
+MODULE_TGT := modules24
+endif
+
+kdist-configure:
+
+kdist-clean: clean
+	[ ! -f ael/control.kdist-saved ] || cp ael/control.kdist-saved ael/control
+
+kdist-build: ael/stamp-kdist-build
+ael/stamp-kdist-build:
+	ael_testdir
+	$(MAKE) CC=$(CROSS)gcc KSRC=$(KSRC) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS) \
+		$(KPKG_EXTRAV_ARG) $(MODULE_TGT)
+	touch ael/stamp-kdist-build
+
+kdist-image: kdist-build
+	ael_testdir
+	ael_testroot
+	[ -f ael/control.kdist-saved ] || cp ael/control ael/control.kdist-saved
+	cp ael/control.kdist-saved ael/control
+	sed -e "s,%{KVERS},$(KVERS),g" < ael/control.modules >> ael/control
+	ael_clean -d -p aim104-modules-$(KVERS)
+	$(MAKE) CC=$(CROSS)gcc KSRC=$(KSRC) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS) \
+		DESTDIR=$(PWD)/ael/aim104-modules-$(KVERS) $(KPKG_EXTRAV_ARG) \
+		KSRC=$(KSRC) $(MODULE_TGT)_install
+	find ael/aim104-modules-$(KVERS) \( -name \*.o -o -name \*.ko \) -exec \
+		$(CROSS)strip --remove-section=.comment --remove-section=.note --strip-debug {} \;
+	ael_build_package -p aim104-modules-$(KVERS) --destdir $(KPKG_DEST_DIR) -- -v $(VERSION)
+
+.PHONY: binary binary-arch binary-indep build clean

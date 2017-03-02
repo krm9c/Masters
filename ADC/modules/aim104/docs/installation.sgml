@@ -1,0 +1,333 @@
+<appendix id="installation">
+<title>Installation</title>
+
+<para>
+This section describes how to compile and install the AIM104 modules
+and library onto your target board. However the most recent Arcom
+development kits include all the precompiled binaries as standard,
+both on the target and in the Host Environment. We recommend that you
+use these in preference to building your own. For building kernel
+modules against a self-built kernel the sources are installed by the
+host environment in <filename>/opt/arcom/src/modules</filename> and
+can be used along with the <command>ael-kernel-build</command> tool as
+described in the Arcom Embedded Linux technical manual.
+</para>
+
+<para>
+Note that more recent development kits are configured with a cross
+compilation environment known as the Arcom Host Environment, if your
+development kit is one of these then it will be mentioned in the
+Technical Manual. In such cases you will need to substitute references
+to <filename>/usr/include</filename> and <filename>/usr/lib</filename>
+with the correct directories for the host environment, this will be of
+the form
+<filename>/opt/arcom/<replaceable>TARGET</replaceable>/{include,lib}</filename>. 
+</para>
+
+<section id="compilation">
+<title>Compilation</title>
+
+<para>
+<orderedlist>
+  <listitem>
+    <para>
+    Unpack the source tarball.
+    </para>
+    <para>
+    <userinput>gunzip -c aim104-<replaceable>x</replaceable>.<replaceable>y</replaceable>.<replaceable>z</replaceable>.tar.gz</userinput>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+    Change to the top level directory.
+    </para>
+    <para>
+    <userinput>cd aim104-<replaceable>x</replaceable>.<replaceable>y</replaceable>.<replaceable>z</replaceable></userinput>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+    Build the C library and test programs.
+    </para>
+    <para>
+<literallayout>
+<userinput>make test-modules</userinput>
+<userinput>make lib</userinput>
+<userinput>make test-lib</userinput>
+</literallayout>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+    (<emphasis>optional</emphasis>) Build the kernel
+    modules. <replaceable>KERNEL</replaceable> is the path to the
+    kernel tree you wish to build against.
+    </para>
+    <para>
+	    For a 2.6 kernel build the modules with
+<literallayout>
+<userinput>make KSRC=<replaceable>KERNEL</replaceable> modules26 </userinput>
+</literallayout>
+    </para>
+    <para>
+	    For a 2.6 kernel build the modules with
+<literallayout>
+<userinput>make KSRC=<replaceable>KERNEL</replaceable> modules24</userinput>
+</literallayout>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+    <emphasis>(Optional)</emphasis> If you require the Java or GCJ library:
+    </para>
+    <para>
+<literallayout>
+<userinput>make lib-java</userinput>
+<userinput>make test-java</userinput>
+<userinput>make test-jxe</userinput> <emphasis>(if you want JXEs for J9)</emphasis>
+</literallayout>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+    <emphasis>(Optional)</emphasis> If you require the GCJ library:
+    </para>
+    <para>
+<literallayout>
+<userinput>make lib-gcj</userinput>
+<userinput>make test-gcj</userinput>
+</literallayout>
+    </para>
+  </listitem>
+
+</orderedlist>
+</para>
+
+</section>
+
+<section id="installation-host">
+<title>Installation - host</title>
+
+<para>
+<orderedlist>
+  <listitem>
+    <para>
+    Copy the <filename>include/linux/arcom/aim104.h</filename> header file to
+    the <filename>/usr/include/linux/arcom</filename> directory.
+    </para>
+    <para>
+    Alternatively, the header file can be installed as
+    <filename><replaceable>prefix</replaceable>/linux/arcom/aim104.h</filename>
+    provided the appropriate command line parameter
+    (<option>-I<replaceable>prefix</replaceable></option>) is passed to
+    the compiler.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+    <emphasis>(Optional)</emphasis> If you require the C library:
+    </para>
+    <para>
+    <orderedlist numeration="loweralpha">
+      <listitem>
+        <para>
+        Copy the <filename>include/arcom/libaim104.h</filename> header file to
+        the <filename>/usr/include/arcom</filename> directory.
+        </para>
+        <para>
+        Alternatively, the header file can be installed as
+        <filename><replaceable>prefix</replaceable>/arcom/libaim104.h</filename>
+        provided the appropriate command line parameter
+        (<option>-I<replaceable>prefix</replaceable></option>) is passed to
+        the compiler.)
+        </para>
+      </listitem>
+    </orderedlist>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+    <emphasis>(Optional)</emphasis> If you require the Java or GCJ library:
+    </para>
+    <para>
+    <orderedlist numeration="loweralpha">
+      <listitem>
+        <para>
+        You'll need to make the <filename>java/aim104.jar</filename> JAR file
+        available to your java compiler  (by setting the classpath) so it can
+        look up the definitions of the classes. How exactly this is done
+        depends on the particular compiler/environment
+        </para>
+      </listitem>
+    </orderedlist>
+    </para>
+  </listitem>
+</orderedlist>
+</para>
+
+</section>
+
+<section id="installation-target">
+<title>Installation - target</title>
+
+<para>
+<orderedlist>
+  <listitem>
+    <para>
+    Install the kernel modules.
+    </para> 
+    <orderedlist numeration="loweralpha">
+      <listitem>
+        <para>
+        On a 2.4.x system copy the modules (<filename>aim104*.o</filename>) to
+        <filename>/lib/modules/<replaceable>kernel-version</replaceable>/arcom/</filename>
+        </para>
+        <para>
+        And add the lines
+<programlisting>
+keep
+path[arcom]=/lib/modules/<replaceable>kernel-version</replaceable>/arcom
+</programlisting>
+        to <filename>/etc/modules.conf</filename>
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+        On a 2.6.x system copy the modules (<filename>aim104*.ko</filename>) to
+        <filename>/lib/modules/<replaceable>kernel-version</replaceable>/extra/</filename>
+        </para>
+      </listitem>
+    </orderedlist>
+  </listitem>
+
+  <listitem>
+    <para>
+    Run (on the target)
+    </para>
+    <para>
+    <userinput>depmod</userinput>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>Create the device node on the target file system by copying
+    <filename>mkdevs.sh</filename> to the target and running it.
+    </para>
+    <para>
+    <userinput>./mkdevs.sh</userinput>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+    <emphasis>(Optional)</emphasis> If you require the C library:
+    </para>
+    <para>
+    <orderedlist numeration="loweralpha">
+      <listitem>
+        <para>
+        Copy the
+        <filename>lib/libaim104.so.<replaceable>x</replaceable>.<replaceable>y</replaceable>.<replaceable>z</replaceable></filename>
+        shared library to the <filename>/usr/lib</filename> directory on the
+        target.
+        </para>
+      </listitem>
+    </orderedlist>
+    </para>
+  </listitem
+
+  <listitem>
+    <para>
+    <emphasis>(Optional)</emphasis> If you  require the Java library:
+    </para>
+    <para>
+    <orderedlist numeration="loweralpha">
+      <listitem>
+        <para>
+        Copy the
+        <filename>java/com/arcom/aim104/libaim104_java.so.<replaceable>x</replaceable>.<replaceable>y</replaceable>.<replaceable>z</replaceable></filename>
+        shared library to the correct directory on the target for the JVM you
+        are using.
+        </para>
+        <para>
+        <orderedlist numeration="lowerroman">
+          <listitem>
+            <para>
+            For J9 put it in the       
+            <filename>/opt/wsdd4.0/bin</filename> directory (or the directory
+            that contains the j9 executable).
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+            For other JVMs it is usually sufficient to place it in the system
+            library search path (i.e. a directory in
+            <filename>/etc/ld.co.conf</filename> or in a directory in the
+            <varname>LD_LIBRARY_PATH</varname> environment variable.
+            </para>
+          </listitem>
+        </orderedlist>
+        </para>
+      </listitem>
+
+      <listitem>
+        <para>
+        Make the <filename>java/aim104.jar</filename> JAR file available to
+        the JVM by: copying the JAR to the target and setting classpaths; or
+        including the JAR contents in the application JAR;  or, if you are
+        using J9, including the JAR in the application JXE.
+        </para>
+      </listitem>
+    </orderedlist>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+    <emphasis>(Optional)</emphasis> If you require the GCJ library:
+    </para>
+    <para>
+    <orderedlist numeration="loweralpha">
+      <listitem>
+        <para>
+        Copy the
+        <filename>java/com/arcom/aim104/libaim104_gcj.so.<replaceable>x</replaceable>.<replaceable>y</replaceable>.<replaceable>z</replaceable></filename>
+        shared library to <filename>/usr/lib</filename> on the target.
+        </para>
+      </listitem>
+    </orderedlist>
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+    <emphasis>(Optional)</emphasis> If you installed any shared libraries:
+    </para>
+    <para>
+    <orderedlist numeration="loweralpha">
+      <listitem>
+        <para>
+        Run (on the target)
+        </para>
+        <para>
+        <userinput>ldconfig</userinput>
+        </para>
+      </listitem>
+    </orderedlist>
+    </para>
+  </listitem>
+
+</orderedlist>
+</para>
+
+</section>
+
+</appendix>

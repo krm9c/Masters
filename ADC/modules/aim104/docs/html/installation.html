@@ -1,0 +1,395 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Installation</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Linux AIM104 drivers"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Java classes"
+HREF="java.html"><LINK
+REL="NEXT"
+TITLE="Installation - host"
+HREF="installation-host.html"></HEAD
+><BODY
+CLASS="APPENDIX"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux AIM104 drivers</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="java.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="installation-host.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="APPENDIX"
+><H1
+><A
+NAME="INSTALLATION"
+></A
+>Appendix A. Installation</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+>A.1. <A
+HREF="installation.html#COMPILATION"
+>Compilation</A
+></DT
+><DT
+>A.2. <A
+HREF="installation-host.html"
+>Installation - host</A
+></DT
+><DT
+>A.3. <A
+HREF="installation-target.html"
+>Installation - target</A
+></DT
+></DL
+></DIV
+><P
+>This section describes how to compile and install the AIM104 modules
+and library onto your target board. However the most recent Arcom
+development kits include all the precompiled binaries as standard,
+both on the target and in the Host Environment. We recommend that you
+use these in preference to building your own. For building kernel
+modules against a self-built kernel the sources are installed by the
+host environment in <TT
+CLASS="FILENAME"
+>/opt/arcom/src/modules</TT
+> and
+can be used along with the <B
+CLASS="COMMAND"
+>ael-kernel-build</B
+> tool as
+described in the Arcom Embedded Linux technical manual.</P
+><P
+>Note that more recent development kits are configured with a cross
+compilation environment known as the Arcom Host Environment, if your
+development kit is one of these then it will be mentioned in the
+Technical Manual. In such cases you will need to substitute references
+to <TT
+CLASS="FILENAME"
+>/usr/include</TT
+> and <TT
+CLASS="FILENAME"
+>/usr/lib</TT
+>
+with the correct directories for the host environment, this will be of
+the form
+<TT
+CLASS="FILENAME"
+>/opt/arcom/<TT
+CLASS="REPLACEABLE"
+><I
+>TARGET</I
+></TT
+>/{include,lib}</TT
+>. </P
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="COMPILATION"
+>A.1. Compilation</A
+></H1
+><P
+><P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>    Unpack the source tarball.
+    </P
+><P
+>    <KBD
+CLASS="USERINPUT"
+>gunzip -c aim104-<TT
+CLASS="REPLACEABLE"
+><I
+>x</I
+></TT
+>.<TT
+CLASS="REPLACEABLE"
+><I
+>y</I
+></TT
+>.<TT
+CLASS="REPLACEABLE"
+><I
+>z</I
+></TT
+>.tar.gz</KBD
+>
+    </P
+></LI
+><LI
+><P
+>    Change to the top level directory.
+    </P
+><P
+>    <KBD
+CLASS="USERINPUT"
+>cd aim104-<TT
+CLASS="REPLACEABLE"
+><I
+>x</I
+></TT
+>.<TT
+CLASS="REPLACEABLE"
+><I
+>y</I
+></TT
+>.<TT
+CLASS="REPLACEABLE"
+><I
+>z</I
+></TT
+></KBD
+>
+    </P
+></LI
+><LI
+><P
+>    Build the C library and test programs.
+    </P
+><P
+><P
+CLASS="LITERALLAYOUT"
+><KBD
+CLASS="USERINPUT"
+>make test-modules</KBD
+><br>
+<KBD
+CLASS="USERINPUT"
+>make lib</KBD
+><br>
+<KBD
+CLASS="USERINPUT"
+>make test-lib</KBD
+></P
+>
+    </P
+></LI
+><LI
+><P
+>    (<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>optional</I
+></SPAN
+>) Build the kernel
+    modules. <TT
+CLASS="REPLACEABLE"
+><I
+>KERNEL</I
+></TT
+> is the path to the
+    kernel tree you wish to build against.
+    </P
+><P
+>	    For a 2.6 kernel build the modules with
+<P
+CLASS="LITERALLAYOUT"
+><KBD
+CLASS="USERINPUT"
+>make KSRC=<TT
+CLASS="REPLACEABLE"
+><I
+>KERNEL</I
+></TT
+> modules26 </KBD
+></P
+>
+    </P
+><P
+>	    For a 2.6 kernel build the modules with
+<P
+CLASS="LITERALLAYOUT"
+><KBD
+CLASS="USERINPUT"
+>make KSRC=<TT
+CLASS="REPLACEABLE"
+><I
+>KERNEL</I
+></TT
+> modules24</KBD
+></P
+>
+    </P
+></LI
+><LI
+><P
+>    <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>(Optional)</I
+></SPAN
+> If you require the Java or GCJ library:
+    </P
+><P
+><P
+CLASS="LITERALLAYOUT"
+><KBD
+CLASS="USERINPUT"
+>make lib-java</KBD
+><br>
+<KBD
+CLASS="USERINPUT"
+>make test-java</KBD
+><br>
+<KBD
+CLASS="USERINPUT"
+>make test-jxe</KBD
+>&nbsp;<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>(if you want JXEs for J9)</I
+></SPAN
+></P
+>
+    </P
+></LI
+><LI
+><P
+>    <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>(Optional)</I
+></SPAN
+> If you require the GCJ library:
+    </P
+><P
+><P
+CLASS="LITERALLAYOUT"
+><KBD
+CLASS="USERINPUT"
+>make lib-gcj</KBD
+><br>
+<KBD
+CLASS="USERINPUT"
+>make test-gcj</KBD
+></P
+>
+    </P
+></LI
+></OL
+></P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="java.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="installation-host.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Java classes</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Installation - host</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

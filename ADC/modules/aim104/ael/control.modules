@@ -1,0 +1,14 @@
+Package: aim104-modules-%{KVERS}
+Architecture: any
+Depends: aim104-common (>=${Source-Version})
+Description: driver modules for aim104 modules
+ This package contains aim104 driver modules built for use with kernel
+ version %{KVERS}. 
+ .
+ These drivers support several of Arcom's AIM104 boards, including
+ the following:
+   AIM104-IN16, AIM104-IO32, AIM104-MULTI-IO, AIM104-OUT16, 
+   AIM104-RELAY8
+ .
+ See the documentation for details of the ael-kernel-build tool which
+ can be used to build customized kernel and module sets.

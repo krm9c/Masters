@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>AIM104-IO32</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Linux AIM104 drivers"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="libaim104"
+HREF="libaim104.html"><LINK
+REL="PREVIOUS"
+TITLE="AIM104-OUT16"
+HREF="libaim104-out16.html"><LINK
+REL="NEXT"
+TITLE="AIM104-MULTI-IO"
+HREF="libaim104-multi-io.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux AIM104 drivers</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="libaim104-out16.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="libaim104-multi-io.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="LIBAIM104-IO32"
+></A
+>AIM104-IO32</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN356"
+></A
+><H2
+>Name</H2
+>aim104_io32_enable_outputs, aim104_io32_set_all, aim104_io32_inputs&nbsp;--&nbsp;access an AIM104-IO32 board</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN361"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN362"
+></A
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>#include &lt;arcom/libaim104.h&gt;</PRE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int aim104_io32_enable_outputs</CODE
+>(int fd, int enable);</CODE
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int aim104_io32_set_all</CODE
+>(int fd, int channel, unsigned char set);</CODE
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int aim104_io32_inputs</CODE
+>(int fd, int channel);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN387"
+></A
+><H2
+>Description</H2
+><P
+><CODE
+CLASS="FUNCTION"
+>aim104_io32_enable_outputs()</CODE
+> enables
+(<CODE
+CLASS="VARNAME"
+>enable</CODE
+> is true/non-zero) or disables
+(<CODE
+CLASS="VARNAME"
+>enable</CODE
+> is false/zero) all the outputs.</P
+><P
+>The following functions operate on 8 lines at a line.
+A <CODE
+CLASS="VARNAME"
+>channel</CODE
+> of 0, 1, 2, or 3 corresponds to lines 0-7, 8-15,
+16-23, or 24-31 respectively.</P
+><P
+><CODE
+CLASS="FUNCTION"
+>aim104_io32_set_all()</CODE
+> sets 8 outputs to the state
+given by <CODE
+CLASS="VARNAME"
+>set</CODE
+>.  <CODE
+CLASS="VARNAME"
+>in_mask</CODE
+> is a bit mask of
+lines that are connected as inputs &mdash; these will always be driven low.</P
+><P
+><CODE
+CLASS="FUNCTION"
+>aim104_io32_inputs()</CODE
+> returns the status of the inputs
+lines given by the bit-mask <CODE
+CLASS="VARNAME"
+>in_mask</CODE
+>.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN402"
+></A
+><H2
+>Return Values</H2
+><P
+>All functions return 0 or an 8 bit unsigned value on success.  A negative
+value is returned when an error occurs.</P
+><P
+>The error codes are:</P
+><PRE
+CLASS="PROGRAMLISTING"
+>enum {
+    AIM104_SUCCESS = 0,        /* Success -- no error occurred. */
+    AIM104_EBAD_CHANNEL = -10, /* channel was not 0, 1, 2, or 3. */
+    AIM104_EIO = -20,          /* Low level I/O error -- check errno for details. */
+};</PRE
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN407"
+></A
+><H2
+>Notes</H2
+><P
+>Since there is no way to obtain the current output status or which
+lines are connected as inputs from the board the application must
+store this information as required.  Since all the functions that
+manipulate the I/O lines take a bit mask of the inputs it is recommend
+that this is stored in a variable or set as a constant.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="libaim104-out16.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="libaim104-multi-io.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>AIM104-OUT16</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="libaim104.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>AIM104-MULTI-IO</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

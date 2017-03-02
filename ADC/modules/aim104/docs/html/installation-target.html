@@ -1,0 +1,440 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Installation - target</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Linux AIM104 drivers"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Installation"
+HREF="installation.html"><LINK
+REL="PREVIOUS"
+TITLE="Installation - host"
+HREF="installation-host.html"></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux AIM104 drivers</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="installation-host.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Appendix A. Installation</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+>&nbsp;</TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="INSTALLATION-TARGET"
+>A.3. Installation - target</A
+></H1
+><P
+><P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>    Install the kernel modules.
+    </P
+><P
+></P
+><OL
+TYPE="a"
+><LI
+><P
+>        On a 2.4.x system copy the modules (<TT
+CLASS="FILENAME"
+>aim104*.o</TT
+>) to
+        <TT
+CLASS="FILENAME"
+>/lib/modules/<TT
+CLASS="REPLACEABLE"
+><I
+>kernel-version</I
+></TT
+>/arcom/</TT
+>
+        </P
+><P
+>        And add the lines
+<PRE
+CLASS="PROGRAMLISTING"
+>keep
+path[arcom]=/lib/modules/<TT
+CLASS="REPLACEABLE"
+><I
+>kernel-version</I
+></TT
+>/arcom</PRE
+>
+        to <TT
+CLASS="FILENAME"
+>/etc/modules.conf</TT
+>
+        </P
+></LI
+><LI
+><P
+>        On a 2.6.x system copy the modules (<TT
+CLASS="FILENAME"
+>aim104*.ko</TT
+>) to
+        <TT
+CLASS="FILENAME"
+>/lib/modules/<TT
+CLASS="REPLACEABLE"
+><I
+>kernel-version</I
+></TT
+>/extra/</TT
+>
+        </P
+></LI
+></OL
+></LI
+><LI
+><P
+>    Run (on the target)
+    </P
+><P
+>    <KBD
+CLASS="USERINPUT"
+>depmod</KBD
+>
+    </P
+></LI
+><LI
+><P
+>Create the device node on the target file system by copying
+    <TT
+CLASS="FILENAME"
+>mkdevs.sh</TT
+> to the target and running it.
+    </P
+><P
+>    <KBD
+CLASS="USERINPUT"
+>./mkdevs.sh</KBD
+>
+    </P
+></LI
+><LI
+><P
+>    <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>(Optional)</I
+></SPAN
+> If you require the C library:
+    </P
+><P
+>    <P
+></P
+><OL
+TYPE="a"
+><LI
+><P
+>        Copy the
+        <TT
+CLASS="FILENAME"
+>lib/libaim104.so.<TT
+CLASS="REPLACEABLE"
+><I
+>x</I
+></TT
+>.<TT
+CLASS="REPLACEABLE"
+><I
+>y</I
+></TT
+>.<TT
+CLASS="REPLACEABLE"
+><I
+>z</I
+></TT
+></TT
+>
+        shared library to the <TT
+CLASS="FILENAME"
+>/usr/lib</TT
+> directory on the
+        target.
+        </P
+></LI
+></OL
+>
+    </P
+></LI
+><LI
+><P
+>    <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>(Optional)</I
+></SPAN
+> If you  require the Java library:
+    </P
+><P
+>    <P
+></P
+><OL
+TYPE="a"
+><LI
+><P
+>        Copy the
+        <TT
+CLASS="FILENAME"
+>java/com/arcom/aim104/libaim104_java.so.<TT
+CLASS="REPLACEABLE"
+><I
+>x</I
+></TT
+>.<TT
+CLASS="REPLACEABLE"
+><I
+>y</I
+></TT
+>.<TT
+CLASS="REPLACEABLE"
+><I
+>z</I
+></TT
+></TT
+>
+        shared library to the correct directory on the target for the JVM you
+        are using.
+        </P
+><P
+>        <P
+></P
+><OL
+TYPE="i"
+><LI
+><P
+>            For J9 put it in the       
+            <TT
+CLASS="FILENAME"
+>/opt/wsdd4.0/bin</TT
+> directory (or the directory
+            that contains the j9 executable).
+            </P
+></LI
+><LI
+><P
+>            For other JVMs it is usually sufficient to place it in the system
+            library search path (i.e. a directory in
+            <TT
+CLASS="FILENAME"
+>/etc/ld.co.conf</TT
+> or in a directory in the
+            <CODE
+CLASS="VARNAME"
+>LD_LIBRARY_PATH</CODE
+> environment variable.
+            </P
+></LI
+></OL
+>
+        </P
+></LI
+><LI
+><P
+>        Make the <TT
+CLASS="FILENAME"
+>java/aim104.jar</TT
+> JAR file available to
+        the JVM by: copying the JAR to the target and setting classpaths; or
+        including the JAR contents in the application JAR;  or, if you are
+        using J9, including the JAR in the application JXE.
+        </P
+></LI
+></OL
+>
+    </P
+></LI
+><LI
+><P
+>    <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>(Optional)</I
+></SPAN
+> If you require the GCJ library:
+    </P
+><P
+>    <P
+></P
+><OL
+TYPE="a"
+><LI
+><P
+>        Copy the
+        <TT
+CLASS="FILENAME"
+>java/com/arcom/aim104/libaim104_gcj.so.<TT
+CLASS="REPLACEABLE"
+><I
+>x</I
+></TT
+>.<TT
+CLASS="REPLACEABLE"
+><I
+>y</I
+></TT
+>.<TT
+CLASS="REPLACEABLE"
+><I
+>z</I
+></TT
+></TT
+>
+        shared library to <TT
+CLASS="FILENAME"
+>/usr/lib</TT
+> on the target.
+        </P
+></LI
+></OL
+>
+    </P
+></LI
+><LI
+><P
+>    <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>(Optional)</I
+></SPAN
+> If you installed any shared libraries:
+    </P
+><P
+>    <P
+></P
+><OL
+TYPE="a"
+><LI
+><P
+>        Run (on the target)
+        </P
+><P
+>        <KBD
+CLASS="USERINPUT"
+>ldconfig</KBD
+>
+        </P
+></LI
+></OL
+>
+    </P
+></LI
+></OL
+></P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="installation-host.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Installation - host</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="installation.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,346 @@
+<chapter id="kernel"><title>Kernel drivers</title>
+
+<para>
+There is a general support module (aim104.o) and a module for each type of
+board.
+</para>
+
+<section id="aim104-o"><title>aim104.o</title>
+<para>
+This general support module must be loaded before any of the board modules can
+be loaded.
+</para>
+
+<para>
+<example id="loading-aim104-module-example"><title>Loading the aim104.o module</title>
+<para>
+<userinput>insmod aim104</userinput>
+</para>
+</example>
+</para>
+
+</section>
+
+<section id="aim104-board-module"><title>AIM104 board modules</title>
+<para>
+All the boards are accessed via character devices with major number 240.
+Each board module can handle up to 8 boards of the same type with a unique 
+minor number for each board.
+</para>
+
+<para>
+Each board module (such as aim104-relay8.o and aim104-io16.o) accept the same
+module parameters and have largely similar character device interfaces.
+</para>
+
+<para>
+<table id="board-modules-table"><title>Board modules</title>
+<tgroup cols=4>
+<thead>
+<row>
+  <entry>Board</entry>
+  <entry>Module</entry>
+  <entry>Device node</entry>
+  <entry>Minor number</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>AIM104-RELAY8/IN8</entry>
+  <entry>aim104-relay8.o</entry>
+  <entry>/dev/arcom/aim104/relay8/0 .. /dev/arcom/aim104/relay8/7</entry>
+  <entry>0 .. 7</entry>
+</row>
+<row>
+  <entry>AIM104-IN16</entry>
+  <entry>aim104-in16.o</entry>
+  <entry>/dev/arcom/aim104/in16/0 .. /dev/arcom/aim104/in16/7</entry>
+  <entry>8 .. 15</entry>
+</row>
+<row>
+  <entry>AIM104-OUT16</entry>
+  <entry>aim104-out16.o</entry>
+  <entry>/dev/arcom/aim104/out16/0 .. /dev/arcom/aim104/out16/7</entry>
+  <entry>16 .. 23</entry>
+</row>
+<row>
+  <entry>AIM104-IO32</entry>
+  <entry>aim104-io32.o</entry>
+  <entry>/dev/arcom/aim104/io32/0 .. /dev/arcom/aim104/io32/7</entry>
+  <entry>24 .. 31</entry>
+</row>
+<row>
+  <entry>AIM104-MULTI-IO</entry>
+  <entry>aim104-multi-io.o</entry>
+  <entry>/dev/arcom/aim104/multi-io/0 .. /dev/arcom/aim104/multi-io/7</entry>
+  <entry>32 .. 39</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+</para>
+
+<section id="module-parameters"><title>Module parameters</title>
+
+<para>
+<table id="module-parameters-table"><title>Module parameters</title>
+<tgroup cols=3>
+<thead>
+<row>
+  <entry>Parameter</entry>
+  <entry>Accepted value</entry>
+  <entry>Description</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>io_base</entry>
+  <entry>Comma separated list of integers.</entry>
+  <entry>Base I/O address of each board.</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+</para>
+
+<para>
+<example id="loading-aim104-relay8-module-example"><title>Loading the aim104-relay8.o module</title>
+<para>
+If we have two AIM104-RELAY8/IN8 boards with base addresses jumpered
+at 180H and 184H.
+</para>
+<para>
+<userinput>insmod aim104-relay8 io_base=0x180,0x184</userinput>
+</para>
+</example>
+On some non-x86 platforms it is necessary to offset the
+address by some amount in order to access the ISA I/O address
+space. Please consult the relevant Quick Start manual.
+</para>
+
+</section>
+
+</section>
+
+<section id="low-level-c-interface"><title>Low level C interface</title>
+
+<para>
+Access to the boards from C is via the device node and the standard
+file I/O system calls (<function>open()</function>,
+<function>close()</function>, <function>read()</function>,
+<function>write()</function> and <function>ioctl()</function>).
+</para>
+
+<para>
+The header file <filename>linux/arcom/aim104.h</filename> must be included to
+use any of the ioctl #defines.
+</para>
+
+<para>
+The driver handles the bit flipping so: 1 always means an output is
+ON or an input is HIGH; and 0 always means an output is OFF or an input is
+LOW.
+</para>
+
+<section id="aim104-relay8-module"><title>aim104-relay8.o</title>
+
+<para>
+All the relays can be enabled or disabled by the AIM104_R8_IOC_ENABLE ioctl.  The ioctl's argument is an integer (0 - disable, 1 - enable).
+</para>
+
+<para>
+The eight digital inputs are accessed by reading a single byte from
+the device.
+</para>
+
+<para>
+The eight relays are set by writing a single byte to the device.
+</para>
+
+<para>
+The current status of the relays (on or off) is obtained with an
+<function>ioctl()</function> - AIM104_R8_IOC_STATUS.  A positive return value contains the
+relay status in the lowest byte (a negative return value indicates an
+error as usual).
+</para>
+
+</section>
+
+<section id="aim104-in16-module"><title>aim104-in16.o</title>
+
+<para>
+The 16 digital inputs are accessed by reading two bytes from the
+device.  Single byte reads will alternate between the low byte and
+high byte of the inputs.
+</para>
+
+</section>
+
+<section id="aim104-out16-module"><title>aim104-out16.o</title>
+
+<para>
+All the outputs can be enabled or disabled by the
+AIM104_OUT16_IOC_ENABLE ioctl.  The ioctl's argument is an integer (0
+- disable, 1 - enable).
+</para>
+
+<para>
+The 16 digital outputs are set by writing two bytes to the device.
+Single byte writes will alternate between the low byte and high byte
+of the outputs.
+</para>
+
+<para>
+The AIM104_OUT16_STATUS ioctl can be used to obtain the current status
+of the outputs.  The status is returned in the low two bytes of the
+return value (with a negative value meaning an error occurred).
+</para>
+
+</section>
+
+<section id="aim104-io32-module"><title>aim104-io32.o</title>
+
+<para>
+All the outputs can be enabled or disabled by the
+AIM104_IO32_IOC_ENABLE ioctl.  The ioctl's argument is an integer (0
+- disable, 1 - enable).
+</para>
+
+<para>
+The 32 digital inputs are accessed by reading four bytes from the device.
+Single byte reads will get inputs 0-7, 8-15, 16-23, then 24-31 before
+wrapping back to 0-7.  Before an input can be read the corresponding
+output must be set to 0 (i.e. OFF).
+</para>
+
+<para>
+The 32 digital outputs are set by writing four bytes to the device.
+Single byte writes will set outputs 0-7, 8-15, 16-23, then 24-31
+before wrapping back to 0-7.
+</para>
+
+<para>
+To ensure correct operation set the outputs (this includes setting
+the bits which will be inputs to 0) before enabling the outputs.
+</para>
+
+</section>
+
+<section id="aim104-multi-io-modules"><title>aim104-multi-io.o</title>
+
+<section><title>Selecting an I/O channel</title>
+
+<para>
+Before any input or output can be performed the I/O channel must be
+selected with the AIM104_MIO_IOC_CHANNEL ioctl.  The ioctl can be used
+to select the input channel, output channel or both by specifying an
+integer parameter.  The <filename>linux/arcom/aim104.h</filename>
+header file contains #define's for the different channels.  Specifying
+only an input channel will not affect the current output channel (and
+vice-versa).  Or (with the '|' operator) an input and output channel
+to set both with one ioctl.
+</para>
+
+<para>
+<table id="aim104-mio-ioc-channel-defines"><title>AIM104_MIO_IOC_CHANNEL #define's</title>
+<tgroup cols=2>
+<thead>
+<row>
+  <entry>#define</entry>
+  <entry>Channel</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>AIM104_MIO_DIGITAL</entry>
+  <entry>The 8 opto-isolated digital inputs</entry>
+</row>
+<row>
+  <entry>AIM104_MIO_ADC0</entry>
+  <entry>The first ADC channel in single-ended mode</entry>
+</row>
+<row>
+  <entry>AIM104_MIO_ADC1</entry>
+  <entry>The second ADC channel in single-ended mode</entry>
+</row>
+<row>
+  <entry>...</entry>
+  <entry>...</entry>
+</row>
+<row>
+  <entry>AIM104_MIO_ADC15</entry>
+  <entry>The 16th ADC channel in single-ended mode</entry>
+</row>
+<row>
+  <entry>AIM104_MIO_ADC0D</entry>
+  <entry>The first ADC channel in differential mode</entry>
+</row>
+<row>
+  <entry>AIM104_MIO_ADC1D</entry>
+  <entry>The second ADC channel in differential mode</entry>
+</row>
+<row>
+  <entry>...</entry>
+  <entry>...</entry>
+</row>
+<row>
+  <entry>AIM104_MIO_ADC7D</entry>
+  <entry>The 8th ADC channel in differential mode</entry>
+</row>
+<row>
+  <entry>AIM104_MIO_DAC0</entry>
+  <entry>The first DAC channel</entry>
+</row>
+<row>
+  <entry>AIM104_MIO_DAC1</entry>
+  <entry>The second DAC channel</entry>
+</row>
+
+</tbody>
+</tgroup>
+</table>
+</para>
+
+<para>
+Once the appropriate channels are selected input and output can be
+performed using the <function>read()</function> and
+<function>write()</function> system calls.
+</para>
+
+</section>
+
+<section>
+<title>Reading the inputs</title>
+
+<para>
+Read a single byte.
+</para>
+
+</section>
+
+<section>
+<title>Reading an ADC channel</title>
+
+<para>
+Read exactly 2 bytes.  The lowest 12 bits contains the unsigned value
+from the ADC (0H corresponding to -5 V; FFFH corresponding to +5 V).
+</para>
+
+</section>
+
+<section>
+<title>Writing to a DAC channel</title>
+
+<para>
+Write exactly 2 bytes.  The lowest 12 bits contain the unsigned value
+to be written to the DAC (0H corresponding to -5V; FFFH corresponding
+to +5 V).
+</para>
+
+</section>
+
+</section>
+
+</section>
+
+</chapter>

@@ -1,0 +1,9 @@
+<chapter id="java"><title>Java classes</title>
+
+<para>
+The Java classes for accessing the boards are in the
+<filename>java/aim104.jar</filename> JAR file and are documented in
+<filename>java/docs/index.html</filename>.
+</para>
+
+</chapter>

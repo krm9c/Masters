@@ -1,0 +1,1706 @@
+%%%
+
+
+
+
+
+\ProvidesPackage{math_dfn}[2013/01/21 v1.077]
+\RequirePackage{acar_tmp}[1999/01/01]
+\RequirePackage{color}
+\RequirePackage{amsfonts,bm}
+\RequirePackage{relsize}
+\RequirePackage{rotating}
+\ifx\graphicsrotate\@undefined
+  \let\graphicsrotate\rotate \let\endgraphicsrotate\endrotate
+\fi
+\RequirePackage{exscale}
+\RequirePackage{relsize}
+\RequirePackage{euscript}
+\RequirePackage{eufrak}
+\RequirePackage{oldgerm}
+
+
+
+
+
+\let\@xpa\expandafter
+
+
+
+\ifx\t@listsep\@undefined \newtoks\t@listsep \fi
+\t@listsep={,}
+
+\@xpa\ifx\csname ifnotecolor\endcsname\relax \@xpa\newif\csname ifnotecolor\endcsname \fi
+\DeclareOption{color}{\notecolortrue}
+\ProcessOptions
+
+
+\ifx\everyaxiom\@undefined \def\everyaxiom{\relax} \fi
+\newtheorem{axm}{\everyaxiom Axiom}
+\def\theaxm{\arabic{axm}} %\def\theaxm{\arabic{axm}:\hskip 0.5 em \relax}
+
+\ifx\everydefinition\@undefined \def\everydefinition{\relax} \fi
+\newtheorem{dfn}{\everydefinition Definition}
+\def\thedfn{\arabic{dfn}} %\def\thedfn{\arabic{dfn}:\hskip 0.5 em \relax}
+
+\ifx\everylemma\@undefined \def\everylemma{\relax} \fi
+\newtheorem{lem}{\everylemma Lemma}
+\def\thelem{\arabic{lem}} %\def\thelem{\arabic{lem}:\hskip 0.5 em \relax}
+
+\ifx\everytheorem\@undefined \def\everytheorem{\relax} \fi
+\newtheorem{thm}{\everytheorem Theorem}
+\def\thethm{\arabic{thm}} %\def\thethm{\arabic{thm}:\hskip 0.5 em \relax}
+
+\ifx\everycorollary\@undefined \def\everycorollary{\relax} \fi
+\newtheorem{cor}{\everycorollary Corollary}
+\def\thecor{\arabic{cor}} %\def\thecor{\arabic{cor}:\hskip 0.5 em \relax}
+
+\ifx\everyexample\@undefined \def\everyexample{\relax} \fi
+\newtheorem{exl}{\everyexample Example}
+\def\theexl{\arabic{exl}} %\def\theexl{\arabic{exl}:\hskip 0.5 em \relax}
+
+\def\axiom{\axm\parindent\z@\sl}
+\def\endaxiom{\endaxm\par}
+
+\def\grouping#1{{\bf #1}\sl}
+\def\endgrouping{\par}
+
+\def\lemma{\lem\parindent\z@\sl}
+\def\endlemma{\endlem\par}
+
+\ifx\everyproof\@undefined \def\everyproof{\relax} \fi
+\ifx\proofhook\@undefined \def\proofhook{\relax} \fi
+\def\proof#1{\vskip-\lastskip\relax\medskip\noindent{\everyproof\bf Proof~#1~}\smaller}
+\def\endproof{\space\normalstrut\nobreak\hfill\proofhook$\Box$\par\medskip}
+
+\def\theorem
+{%
+  \futurelet\@nextchar\check@theorem@opt
+}
+\def\check@theorem@opt
+{%
+    \ifx[\@nextchar
+      \let\@next\@theorem@
+    \else
+      \def\@next{\@theorem@[\relax]}%
+    \fi
+    \@next
+}
+\def\@theorem@[#1]%
+{%
+  \thm\parindent\z@\sl
+  \ifx#1\relax\relax \else
+    \;{\bf\everytheorem #1}\;\relax
+  \fi
+}
+\def\endtheorem{\endthm\par}
+
+\def\corollary{\cor\parindent\z@\sl}
+\def\endcorollary{\endcor\par}
+
+%\def\mathdefinition
+%{%
+%  \ifhmode\par\fi
+%  \quote\it Definition:\quad\sl \ignorespaces
+%}
+\def\mathdefinition{\ifhmode\par\fi \parindent\z@ \quote\sl \ignorespaces}
+\def\endmathdefinition{\endquote\par}
+
+\def\maththeorem{\ifhmode\par\fi \quote\it Theorem:\quad\sl \ignorespaces}
+\def\endmaththeorem{\endquote\par}
+
+\def\definition{\dfn\sf}
+\def\enddefinition{\enddfn\par}
+
+\def\example{\quote\exl\smaller\rm}
+\def\endexample{\endexl\endquote\par}
+
+
+
+
+
+\def\bracketspace{\kern 0.075 em \relax}
+\def\Bracketspace{\kern 0.15 em \relax}
+
+
+
+\def\ldotssizeiii
+{%
+  \mathinner
+  {%
+    \mkern 2 mu
+    \hbox{.}\mkern -4 mu
+    \hbox{.}\mkern -4 mu
+    \hbox{.}\mkern 2 mu
+  }%
+}
+\def\ldotssizeiv
+{%
+  \mathinner
+  {%
+    \mkern 1 mu
+    \hbox{.}\mkern -1 mu
+    \hbox{.}\mkern -1 mu
+    \hbox{.}\mkern 1 mu
+  }%
+}
+\def\wideldots
+{%
+  \mathinner
+  {%
+    \mkern 1 mu
+    \hbox{.}\mkern 4 mu
+    \hbox{.}\mkern 4 mu
+    \hbox{.}\mkern 1 mu
+  }%
+}
+
+
+\def\vdotssizeiii
+{%
+  \vbox{\baselineskip0.8\p@ \lineskiplimit\z@ \kern1.2\p@ \hbox{.}\hbox{.}\hbox{.}}%
+}
+\def\vdotssizeiv
+{%
+  \vbox{\baselineskip1.2\p@ \lineskiplimit\z@ \kern1.8\p@ \hbox{.}\hbox{.}\hbox{.}}%
+}
+\def\lowervdots
+{%
+  \lower 2 \p@ \vbox{\baselineskip4\p@\lineskiplimit\z@\kern6\p@\hbox{.}\hbox{.}\hbox{.}}%
+}
+
+\def\ddotssizeiii
+{%
+  \mathinner
+  {%
+    \mkern 2 mu
+    \raise 1.6 \p@ \vbox{\kern1.6\p@\hbox{.}}\mkern -4 mu
+    \raise 0.8 \p@ \hbox{.}\mkern -4 mu
+    \hbox{.}\mkern 2 mu
+  }%
+}
+\def\ddotssizeiv
+{%
+  \mathinner
+  {%
+    \mkern 1 mu
+    \raise 2.4 \p@ \vbox{\kern2.4\p@\hbox{.}}\mkern -1 mu
+    \raise 1.2 \p@ \hbox{.}\mkern -1 mu
+    \hbox{.}\mkern 1 mu
+  }%
+}
+\def\wideddots
+{%
+  \mathinner
+  {%
+    \mkern 1 mu
+    \raise 7 \p@ \vbox{\kern 7 \p@ \hbox{.}}\mkern 4 mu
+    \raise 4 \p@ \hbox{.}\mkern 4 mu
+    \raise \p@ \hbox{.}\mkern 1 mu
+  }%
+}
+
+\def\widelowerddots
+{%
+  \mathinner
+  {%
+    \mkern 1 mu
+    \raise 4 \p@ \vbox{\kern 4 \p@ \hbox{.}}\mkern 4 mu
+    \raise \p@ \hbox{.}\mkern 4 mu
+    \lower 2 \p@ \vbox{\kern -2 \p@ \hbox{.}}\mkern 1 mu
+  }%
+}
+
+\def\skewddots
+{%
+  \mathinner
+  {%
+    \mkern 1 mu
+    \raise \p@ \hbox{.}\mkern 2 mu
+    \raise 4 \p@ \hbox{.}\mkern 2 mu
+    \raise 7 \p@ \vbox{\kern 7 \p@ \hbox{.}}\mkern 1 mu
+  }%
+}
+\def\wideskewddots
+{%
+  \mathinner
+  {%
+    \mkern 1 mu
+    \raise \p@ \hbox{.}\mkern 4 mu
+    \raise 4 \p@ \hbox{.}\mkern 4 mu
+    \raise 7 \p@ \vbox{\kern 7 \p@ \hbox{.}}\mkern 1 mu
+  }%
+}
+\def\widelowerskewddots
+{%
+  \mathinner
+  {%
+    \mkern 1 mu
+    \lower 2 \p@ \vbox{\kern -2 \p@ \hbox{.}}\mkern 4 mu
+    \raise \p@ \hbox{.}\mkern 4 mu
+    \raise 4 \p@ \vbox{\kern 4 \p@ \hbox{.}}\mkern 1 mu
+  }%
+}
+
+
+\def\differential{{\rm d}}
+\let\d\differential
+
+
+\def\questioneq{\mathrel{\mathop{\kern\z@ =}\limits^{?}}}
+
+
+\def\innerprod#1{\@innerprod#1\@endinnerprod}
+\def\@innerprod#1,#2\@endinnerprod
+{%
+  \ifmmode
+    \mathchoice
+      {\displaystyle\left\langle#1\,{,}\,#2\normalstrut\right\rangle}%
+      {\textstyle\left\langle#1\,{,}\,#2\right\rangle}%
+      {\scriptstyle\langle#1\,{,}\,#2\rangle}%
+      {\scriptscriptstyle\langle#1\,{,}\,#2\rangle}%
+  \else
+    \hbox{$\bigl\langle #1\,{,}\,#2\bigr\rangle$}%
+  \fi
+}
+
+
+
+\def\convolution#1{\@convolution#1\@endconvolution}
+\def\@convolution#1,#2\@endconvolution%
+{%
+  \ifmmode
+    \mathchoice
+      {\displaystyle\left(#1\ast#2\normalstrut\right)}%
+      {\textstyle\left(#1\ast#2\right)}%
+      {\scriptstyle(#1\ast#2)}%
+      {\scriptscriptstyle(#1\ast#2)}%
+  \else
+    \hbox{$\bigl( #1\ast #2\bigr)$}%
+  \fi
+}
+
+
+
+\def\impulse{\delta}
+\def\unitstep
+{%
+  \leavevmode
+  \bgroup
+    \mathchoice
+      {%
+        \setbox\z@=\hbox{$\displaystyle 1\m@th$}%
+        \dimen@=-\wd\z@
+        \copy\z@\kern\dimen@ \kern 1.2\ex@
+        \box\z@
+      }%
+      {%
+        \setbox\z@=\hbox{$\textstyle 1\m@th$}%
+        \dimen@=-\wd\z@
+        \copy\z@\kern\dimen@ \kern 1.2\ex@
+        \box\z@
+      }%
+      {%
+        \setbox\z@=\hbox{$\scriptstyle 1\m@th$}%
+        \relsize{-1}%
+        \dimen@=-\wd\z@
+        \copy\z@\kern\dimen@ \kern 1.2\ex@
+        \box\z@
+      }%
+      {%
+        \setbox\z@=\hbox{$\scriptscriptstyle 1\m@th$}%
+        \relsize{-2}%
+        \dimen@=-\wd\z@
+        \copy\z@\kern\dimen@ \kern 1.2\ex@
+        \box\z@
+      }%
+  \egroup
+}
+
+
+
+\def\dummyarg
+{%
+  \bgroup
+    \mathchoice
+      {%
+        \setbox0=\hbox{\relsize{-3}$\displaystyle(\cdot)\m@th$}%
+        \raise\dp0\copy0
+      }%
+      {%
+        \setbox0=\hbox{\relsize{-3}$\textstyle(\cdot)\m@th$}%
+        \raise\dp0\copy0
+      }%
+      {%
+        \setbox0=\hbox{\relsize{-3}$\scriptstyle(\cdot)\m@th$}%
+        \raise\dp0\copy0
+      }%
+      {%
+        \setbox0=\hbox{\relsize{-3}$\scriptscriptstyle(\cdot)\m@th$}%
+        \raise\dp0\copy0
+      }%
+  \egroup
+}
+
+
+
+\def\sensitivity#1#2%
+{%
+  \relax
+  \ifmmode
+    {\EuScript S}_{\scriptscriptstyle #1}^{\scriptscriptstyle #2}%
+  \else
+%    ${\EuScript S}_{\scriptscriptstyle #1}^{\scriptscriptstyle #2}$%
+  \fi
+}
+
+\def\hres{\hbox{$\cal H$}}
+\def\ind{\hbox{$\cal I$}}
+\def\obs{\hbox{$\cal O$}}
+\def\unobs{\hbox{$\cal U$}}
+%\def\naturals{\hbox{$\cal N$}}
+\def\naturals{\hbox{$\mathbb N$}}
+%\def\integers{\hbox{$\cal Z$}}
+\def\integers{\hbox{$\mathbb Z$}}
+%\def\reals{\hbox{$\cal R$}}
+\def\reals{\hbox{$\mathbb R$}}
+\def\complexus{\hbox{$\mathbb C$}}
+\def\bases{\hbox{$\cal B$}}
+\def\lsys{\hbox{\frakfamily S}}
+\def\lang{\hbox{$\EuScript L$}}
+\def\astr{\hbox{$\EuScript K$}}
+\def\interp{\hbox{$\EuScript I$}}
+\def\var{\hbox{$\EuScript V$}}
+\def\psym{\hbox{$\EuScript P$}}
+\def\fsym{\hbox{$\EuScript F$}}
+\def\terms{\hbox{$\EuScript T$}}
+\def\conn{\hbox{$\EuScript C$}}
+\def\quan{\hbox{$\EuScript Q$}}
+\def\form{\hbox{$\Phi$}}
+\def\aform{\hbox{$\EuScript A$}}
+%\def\arity{\hbox{$\boldsymbol\alpha$}}
+\def\arity{\hbox{\larger\larger$\alpha$}}
+\def\largealpha{\hbox{\larger$\alpha$}}
+\def\Largealpha{\hbox{\larger\larger$\alpha$}}
+\def\largebeta{\hbox{\larger$\beta$}}
+\def\Largebeta{\hbox{\larger\larger$\beta$}}
+\def\bigoh{\hbox{$\cal O$}}
+\def\smalloh{\hbox{\scriptsize$\cal O$}}
+
+
+
+
+\def\z{{\sf z}}
+\def\w{{\sf w}}
+\def\contmatr{\hbox{$\EuScript C$}}
+\def\contgram{\hbox{$\EuFrak C$}}
+\def\obsvmatr{\hbox{$\EuScript O$}}
+\def\obsvgram{\hbox{$\EuFrak O$}}
+
+\def\errorconstant{\hbox{$\EuScript K$}}
+
+\def\dB{{\rm dB}}
+
+
+
+\def\sgn{\mathop{\operator@font sgn}\nolimits}
+\def\integer{\mathop{\operator@font int}\nolimits}
+
+\def\tr{\mathop{\operator@font tr}\nolimits}
+\def\adj{\mathop{\operator@font adj}\nolimits}
+\def\rank{\mathop{\operator@font rank}\nolimits}
+\def\cof{\mathop{\operator@font cof}\nolimits}
+\def\nullspace{\mathop{\operator@font null}\nolimits}
+\def\rangespace{\mathop{\operator@font range}\nolimits}
+\def\spn
+{%
+  \let\everylargeargument\relax
+  \let\everylargeargumentvar\relax
+  \let\everylargeargumentdelim\relax
+  \@getscripts{\@largeargument(\{,\}){\operator@font span}}%
+}
+\def\pseudoinv#1{\ifmmode #1^{\#}_{\strut}\else \hbox{$#1^{\#}_{\strut}$}\fi}
+
+\def\diag
+{%
+  \let\everylargeargument\relax
+  \let\everylargeargumentvar\relax
+  \let\everylargeargumentdelim\relax
+  \@getscripts{\@largeargument([,]){\operator@font diag}}%
+}
+
+\def\MIN{\mathop{\operator@font MIN}}
+\def\MAX{\mathop{\operator@font MAX}}
+
+\def\cnt{\mathop{\operator@font cnt}\nolimits}
+\def\hgt{\mathop{\operator@font hgt}\nolimits}
+
+\def\looptype{{\cal L}_\kappa}
+
+
+
+\ifx\everycheckmark\@undefined \def\everycheckmark{\relax} \fi
+\ifx\everycrossmark\@undefined \def\everycrossmark{\relax} \fi
+\def\checkmark{\everycheckmark\ding{52}}
+\def\nocheckmark{\everycheckmark\phantom{\ding{52}}}
+\def\crossmark{\everycrossmark\ding{56}}
+\def\xmark{\hbox{\relsize{1}$\times$}}
+\def\omark{\hbox{\relsize{3}$\circ$}}
+
+
+
+\def\level#1{{\sf #1}}
+
+
+
+\def\tfnct
+{%
+  \mathchoice
+    {\mathbin{\hbox{$\incircle{t}$}}}%
+    {\mathbin{\hbox{$\incircle{t}$}}}%
+    {\mathbin{\hbox{$\scriptincircle{t}$}}}%
+    {\mathbin{\hbox{$\scriptscriptincircle{t}$}}}%
+}
+\def\sfnct
+{%
+  \mathchoice
+    {\mathbin{\hbox{$\incircle{s}$}}}%
+    {\mathbin{\hbox{$\incircle{s}$}}}%
+    {\mathbin{\hbox{$\scriptincircle{s}$}}}%
+    {\mathbin{\hbox{$\scriptscriptincircle{s}$}}}%
+}
+\def\tfunction{\/\mathop{\hbox{\relsize{2}\sf t}}}
+\def\sfunction{\/\mathop{\hbox{\relsize{2}\sf s}}}
+\def\comp{\mathbin{\circ}}
+\def\supinfcomp{\mathbin{\bullet}}
+\def\suptcomp{\mathbin{\blacksquare}}
+
+
+
+\def\integerpartof#1.#2\is{#1}
+
+\def\altfont
+{%
+  \@xpa\@xpa\@xpa\c@tmp@aa\@xpa\integerpartof\f@size.0\is\relax
+  \ifnum\c@tmp@aa<9\relax
+    \font\@altfont=cmssi8 at \f@size pt\relax
+  \else
+    \ifnum\c@tmp@aa<10\relax
+      \font\@altfont=cmssi9 at \f@size pt\relax
+    \else
+      \ifnum\c@tmp@aa<11\relax
+        \font\@altfont=cmssi10 at \f@size pt\relax
+      \else
+        \ifnum\c@tmp@aa<12\relax
+          \font\@altfont=cmssi10 at \f@size pt\relax
+        \else
+          \font\@altfont=cmssi12 at \f@size pt\relax
+        \fi
+      \fi
+    \fi
+  \fi
+  \@altfont\relax
+}
+
+
+\def\altv{\protect\@altv}
+\def\@altv#1%
+{%
+  \mathchoice
+    {\mathord{\hbox{\altfont #1}}}%
+    {\mathord{\hbox{\altfont #1}}}%
+    {\mathord{\hbox{\smaller\smaller\altfont #1}}}%
+    {\mathord{\hbox{\smaller\smaller\smaller\altfont #1}}}%
+  \post@altv
+}
+
+\ifx\setlistsep\@undefined
+  \def\setlistsep#1%
+  {%
+    \def\car##1{\@xpa\@@car##1#1\@nil\end@car}%
+    \def\@@car##1#1##2\end@car{##1}%
+    \def\cdr##1{\@xpa\@@cdr##1#1\@nil\end@cdr}%
+    \def\@@cdr##1#1##2\end@cdr
+    {%
+      \ifx\@nil##2\@empty \else\@@@cdr##2\end@cdr\fi
+    }%
+    \def\@@@cdr##1#1\@nil\end@cdr{##1}%
+  }%
+\fi
+\@xpa\setlistsep\@xpa{\the\t@listsep}
+
+\def\altv@specialcases
+{%
+  {(,\mskip 2mu minus 1mu\relax},%
+  {),\,\relax},%
+  {\protect\bigr,\,\relax},%
+  {\protect\Bigr,\ \relax},%
+  {',\mskip 2mu\relax},%
+  {^,\mskip 2mu\relax}%
+}
+
+\def\post@altv{\futurelet\@nextchar\post@@altv}
+\def\post@@altv
+{%
+  \bgroup
+    \let\h@true\relax\let\h@false\relax
+    \let\v@true\relax\let\v@false\relax
+    \ifcat{\@nextchar \else
+      \ifcat}\@nextchar \else
+        \aftergroup\processpost@altv
+      \fi
+    \fi
+  \egroup
+}
+\def\processpost@altv#1%
+{%
+  \def\@nextchar{#1}%
+  \let\altv@adjustment\relax
+  \def\protect{\noexpand\protect\noexpand}%
+  \edef\@tmp@aa{\altv@specialcases\the\t@listsep}%
+  \loop
+  \ifx\@tmp@aa\@empty\else
+    \edef\altv@specialcase{\car\@tmp@aa}%
+    \edef\@tmp@aa{\cdr\@tmp@aa}%
+    \edef\altv@case{\car\altv@specialcase}%
+    \let\protect\@empty
+    \@xpa\@xpa\@xpa\def\@xpa\@xpa\@xpa\altv@case\@xpa\@xpa\@xpa{\altv@case}%
+    \def\protect{\noexpand\protect\noexpand}%
+    \ifx\@nextchar\altv@case\relax
+      \edef\altv@adjustment{\cdr\altv@specialcase}%
+      \let\@tmp@aa\@empty
+    \fi
+  \repeat
+  \let\protect\relax
+  \altv@adjustment#1%
+}
+
+
+
+\ifx\everylargeargument\@undefined \let\everylargeargument\relax \fi
+\ifx\everylargeargumentvar\@undefined \let\everylargeargumentvar\relax \fi
+\ifx\everylargeargumentdelim\@undefined \let\everylargeargumentdelim\relax \fi
+
+\ifx\everylaplacetrans\@undefined \def\everylaplacetrans{\relax} \fi
+\def\laplacetrans
+{%
+  \let\everylargeargument\relax
+  \let\everylargeargumentvar\everylaplacetrans
+  \let\everylargeargumentdelim\everylaplacetrans
+  \@getscripts{\@largeargument([,]){\EuScript L}}%
+}
+\def\laplacetransarg#1{{\everylaplacetrans\left(#1\right)}}
+
+\ifx\everyfouriertrans\@undefined \def\everyfouriertrans{\relax} \fi
+\def\fouriertrans
+{%
+  \let\everylargeargument\relax
+  \let\everylargeargumentvar\everyfouriertrans
+  \let\everylargeargumentdelim\everyfouriertrans
+  \@getscripts{\@largeargument[\def\everyspecialsuperscript{\mskip 4mu\relax}]([,]){\EuScript F}}%
+}
+\def\fouriertransarg#1{{\everyfouriertrans\left(#1\right)}}
+
+\ifx\everyztrans\@undefined \def\everyztrans{\relax} \fi
+\def\ztrans
+{%
+  \let\everylargeargument\relax
+  \let\everylargeargumentvar\everyztrans
+  \let\everylargeargumentdelim\everyztrans
+  \@getscripts{\@largeargument([,]){\EuScript Z}}%
+}
+\def\ztransarg#1{{\everyztrans\left(#1\right)}}
+
+\ifx\everywtrans\@undefined \def\everywtrans{\relax} \fi
+\def\wtrans
+{%
+  \let\everylargeargument\relax
+  \let\everylargeargumentvar\everywtrans
+  \let\everylargeargumentdelim\everywtrans
+  \@getscripts{\@largeargument([,]){\EuScript W}}%
+}
+\def\wtransarg#1{{\everywtrans\left(#1\right)}}
+
+\def\@largeargument
+{%
+  \futurelet\@nextchar\check@largeargument@opt
+}
+
+\def\check@largeargument@opt
+{%
+  \ifx[\@nextchar
+    \let\@next\@@largeargument
+  \else
+    \def\@next{\@@largeargument[\relax]}%
+  \fi
+  \@next
+}
+
+\def\@@largeargument[#1](#2,#3)#4#5%
+{%
+  \hbox
+  {%
+    #1\relax
+    \ifx\relax#5\empty
+      $\everylargeargumentvar\mathop{\operator@font #4}\nolimits_{\@subs}^{\@sups}$%
+    \else
+      $%
+        \mathchoice
+          {%
+            {\everylargeargumentvar\mathop{\operator@font #4}\nolimits_{\@subs}^{\@sups}}%
+            \displaystyle
+            {\everylargeargumentdelim\left#2\vphantom{\everylargeargument #5}\normalstrut\right.}%
+              \,{\everylargeargument #5}\normalstrut\,%
+            {\left.\vphantom{\everylargeargument #5}\normalstrut\everylargeargumentdelim\right#3}%
+          }%
+          {%
+            {\everylargeargumentvar\mathop{\operator@font #4}\nolimits_{\@subs}^{\@sups}}%
+            \textstyle
+            {\everylargeargumentdelim\left#2\vphantom{\everylargeargument #5}\right.}%
+              \,{\everylargeargument #5}\,%
+            {\left.\vphantom{\everylargeargument #5}\everylargeargumentdelim\right#3}%
+          }%
+          {%
+            {\everylargeargumentvar\mathop{\operator@font #4}\nolimits_{\@subs}^{\@sups}}%
+            \scriptstyle
+            {\everylargeargumentdelim #2}%
+              \,{\everylargeargument #5}\,%
+            {\everylargeargumentdelim #3}%
+          }%
+          {%
+            {\everylargeargumentvar\mathop{\operator@font #4}\nolimits_{\@subs}^{\@sups}}%
+            \scriptscriptstyle
+            {\everylargeargumentdelim #2}%
+              \,{\everylargeargument #5}\,%
+            {\everylargeargumentdelim #3}%
+          }%
+      $%
+    \fi
+  }%
+  \@postlargeargument
+}
+
+\def\@postlargeargument{\futurelet\@nextchar\check@postlargeargument}
+
+\def\check@postlargeargument
+{%
+    \ifx(\@nextchar
+      \let\@next\@postlargeargumentparenthesis
+    \else
+      \ifx\bigl\@nextchar
+        \let\@next\@postlargeargumentbigparenthesis
+      \else
+        \ifx\Bigl\@nextchar
+          \let\@next\@postlargeargumentBigparenthesis
+        \else
+          \ifx\biggl\@nextchar
+            \let\@next\@postlargeargumentbiggparenthesis
+          \else
+            \ifx\Biggl\@nextchar
+              \let\@next\@postlargeargumentBiggparenthesis
+            \else
+              \let\@next\relax
+            \fi
+          \fi
+        \fi
+      \fi
+    \fi
+    \@next
+}
+
+\def\@postlargeargumentparenthesis(#1){{\everylargeargumentdelim(}#1{\everylargeargumentdelim)}}
+\def\@postlargeargumentbigparenthesis\bigl(#1\bigr){{\everylargeargumentdelim\bigl(}#1{\everylargeargumentdelim\bigr)}}
+\def\@postlargeargumentBigparenthesis\Bigl(#1\Bigr){{\everylargeargumentdelim\Bigl(}#1{\everylargeargumentdelim\Bigr)}}
+\def\@postlargeargumentbiggparenthesis\biggl(#1\biggr){{\everylargeargumentdelim\biggl(}#1{\everylargeargumentdelim\biggr)}}
+\def\@postlargeargumentBiggparenthesis\Biggl(#1\Biggr){{\everylargeargumentdelim\Biggl(}#1{\everylargeargumentdelim\Biggr)}}
+
+
+\def\sizedoperator
+{%
+  \futurelet\@nextchar\check@sizedoperator@opt
+}
+
+\def\check@sizedoperator@opt
+{%
+    \ifx[\@nextchar
+      \let\@next\@sizedoperator
+    \else
+      \def\@next{\@sizedoperator[\normalsize]}%
+    \fi
+    \@next
+}
+
+\def\@sizedoperator[#1]#2#3%
+{%
+  \@getscripts
+  {%
+    \hbox
+    {%
+      \let\everyspecialsubscript\scriptstyle
+      \let\everyspecialsuperscript\scriptstyle
+      #2%
+      $\displaystyle
+        \mathop{\operator@font #3}\nolimits
+          _{\hbox{#1$\@subs$}}%
+          ^{\hbox{#1$\@sups$}}%
+      $%
+    }%
+  }%
+}
+
+
+
+\def\bigsqcap
+{%
+  \mathop
+  {%
+    \bgroup
+      \setbox0=\hbox{$\displaystyle\bigsqcup$}
+      \dimen0=\ht0
+      \advance\dimen0-\dp0
+      \raise\dimen0
+        \hbox{\begin{turn}{180}$\displaystyle\bigsqcup$\end{turn}}%
+    \egroup
+  }%
+}
+
+
+
+\def\mathvarmodifylist{}
+\def\mathvarmodify#1#2%
+{%
+  \let\protect@orig\protect
+  \def\protect{\noexpand\protect\noexpand}%
+  \edef\mathvarmodifylist{{#1\the\t@listsep #2}\the\t@listsep\mathvarmodifylist}%
+  \let\protect\protect@orig
+}
+\def\modifymathvars{\toks255={}\def\everymath{\toks255\my@everymath}}
+\def\my@everymath#1${\def\my@mathcontent{#1}\modifymathvars@}%
+\def\modifymathvars@
+{%
+  \def\protect{\noexpand\protect\noexpand}%
+  \edef\@tmp@aa{\mathvarmodifylist}%
+  \loop
+  \ifx\@tmp@aa\@empty\else
+    \edef\@mathvarpair{\car\@tmp@aa}%
+    \edef\@tmp@aa{\cdr\@tmp@aa}%
+    \edef\@mathvar{\car\@mathvarpair}%
+    \edef\@mathvarmodified{\cdr\@mathvarpair}%
+    \@xpa\@xpa\@xpa\do@mathvarmodify\@xpa\@xpa\@xpa{\@xpa\@mathvar\@xpa}\@xpa{\@mathvarmodified}%
+  \repeat
+  \let\protect\@empty
+  \my@mathcontent$%
+}
+\def\do@mathvarmodify#1#2%
+{%
+  \def\my@mathmodify##1\end@mymathmodify{\my@mathmodify@##1#1\end@mymathmodify}%
+  \def\my@mathmodify@##1#1##2\end@mymathmodify
+  {%
+    \def\my@temp{##2}%
+    \ifx\my@temp\@empty
+      \let\my@next\relax
+    \else
+      \def\my@next{\my@mathmodify@@##1#1##2\end@mymathmodify}%
+    \fi
+    \my@next
+  }%
+  \def\my@mathmodify@@##1#1##2#1\end@mymathmodify{\def\my@mathcontent{##1#2##2}}%
+  \@xpa\my@mathmodify\my@mathcontent\end@mymathmodify
+}
+
+
+
+\def\fraction#1#2%
+{%
+  \hbox
+  {%
+    $^#1\mkern -0.3333\thinmuskip\!%
+    \raise .3 ex \hbox{/}\!{\scriptstyle #2}$%
+  }%
+}
+
+\def\tightendisplaystyleover<#1>%
+{%
+  \let\displaystyle@orig\displaystyle
+  \let\over@orig\over
+  \def\displaystyle##1{\process@tightdisplaystyleover\relax##1\over\relax\endprocess@displaystyleover<#1>}%
+}
+\def\process@tightdisplaystyleover#1\over#2\endprocess@displaystyleover<#3,#4>%
+{%
+  \displaystyle@orig
+  \ifx#2\relax\relax
+    #1%
+  \else
+    \remove@over@relax#2\to\my@den
+    {\lower #3 \hbox{$\textstyle #1$}\over@orig\raise #4 \hbox{$\textstyle\my@den$}}%
+  \fi
+}
+\def\remove@over@relax#1\over\relax\to#2{\def#2{#1}}
+
+\def\convertdisplaystyleover{\futurelet\@next@char\check@convertdisplay@opt}
+\def\check@convertdisplay@opt
+{%
+  \ifx\@next@char[\relax
+    \let\@next@\convertdisplaystyleover@withopt
+  \else
+    \let\convertdisplay@numl\relax
+    \let\convertdisplay@numr\relax
+    \let\convertdisplay@denl\relax
+    \let\convertdisplay@denr\relax
+    \let\@next@\convertdisplaystyleover@withoutopt
+  \fi
+  \@next@
+}
+\def\convertdisplaystyleover@withopt[#1,#2;#3,#4]%
+{%
+  \def\convertdisplay@numl{#1}%
+  \def\convertdisplay@numr{#2}%
+  \def\convertdisplay@denl{#3}%
+  \def\convertdisplay@denr{#4}%
+  \convertdisplaystyleover@withoutopt
+}
+\def\convertdisplaystyleover@withoutopt<#1>%
+{%
+  \let\displaystyle@orig\displaystyle
+  \def\displaystyle##1{\process@convertdisplaystyleover\relax##1\over\relax\endprocess@displaystyleover<#1>}%
+}
+\def\process@convertdisplaystyleover#1\over#2\endprocess@displaystyleover<#3,#4,#5>%
+{%
+  \displaystyle@orig
+  \ifx#2\relax\relax
+    \left#3#1\right#5%
+  \else
+    \let\over\relax
+    \left#3\convertdisplay@numl #1\convertdisplay@numr #4\convertdisplay@denl #2\convertdisplay@denr\right#5%
+  \fi
+}
+
+
+
+\def\wdbox{\futurelet\@next@char\check@wdboxto}
+\def\check@wdboxto
+{%
+  \ifx t\@next@char\relax
+    \let\@next@\@wdboxto
+  \else
+    \let\@next@\hbox
+  \fi
+  \@next@
+}
+\def\@wdboxto to{}
+\def\widthof#1{\setbox\@tempboxa\hbox{#1}\@@wdbox}
+\def\@@wdbox#1{\hbox to \wd\@tempboxa {#1\hss}}
+
+\def\clap#1{\hbox to \z@ {\hss#1\hss}}
+\def\llapneg{\llap{$-$}}
+\def\eqndef{\mathrel{\stackrel{\triangle}{=}}}
+\let\eqdef\eqndef
+\def\eqnplus
+{%
+  \noalign{\vspace*{-3 ex}}
+    $+\quad$\\
+  \hline
+}
+\let\eqplus\eqnplus
+\def\unknowneqn{\mathrel{\stackrel{\hbox{\smaller ?}}{=}}}
+\let\unknowneq\unknowneqn
+
+
+\def\vect#1%
+{%
+  \/%
+  \ifmmode
+    \mathchoice
+      {\mathord{\hbox{\ifx\boldmath@orig\@undefined \boldmath \else \boldmath@orig \fi $\mathbf\protect #1$}}}%
+      {\mathord{\hbox{\ifx\boldmath@orig\@undefined \boldmath \else \boldmath@orig \fi $\mathbf\protect #1$}}}%
+      {\mathord{\hbox{\ifx\boldmath@orig\@undefined \boldmath \else \boldmath@orig \fi $\scriptstyle\mathbf\protect #1$}}}%
+      {\mathord{\hbox{\ifx\boldmath@orig\@undefined \boldmath \else \boldmath@orig \fi $\scriptscriptstyle\mathbf\protect #1$}}}%
+  \else
+    \hbox{\ifx\boldmath@orig\@undefined \boldmath \else \boldmath@orig \fi $\mathbf\protect #1$}%
+  \fi
+}
+\def\matr#1{\/{\mathbf\protect #1}}
+\bgroup
+  \catcode`\,=\active
+  \gdef\rowvect
+  {%
+    \bgroup \iffalse\egroup\fi
+      \ifmmode\@tmp@aa@true\else\@tmp@aa@false$\fi
+      \bigl[\mskip 3 mu plus 2 mu minus 1 mu \mathpunct{}%
+        \catcode`,=\active
+        \def,{\mskip 12 mu plus 4 mu minus 3 mu \mathpunct{}}%
+        \process@rowvect
+  }
+  \gdef\process@rowvect#1%
+  {%
+        {#1}\relax
+      \mskip 5 mu plus 2 mu minus 1 mu \relax \bigr]{}%
+      \if@tmp@aa@\else$\fi
+    \iffalse\bgroup\fi \egroup
+  }  
+\egroup
+\def\comma{,}
+
+
+
+\def\tdot#1%
+{%
+  \vbox
+  {%
+    \m@th
+    \ialign
+    {%
+      ##\crcr
+      \hfil$\mkern 2 mu ^{. \mkern -1 mu . \mkern -1 mu .}$\hfil\crcr
+      \noalign{\kern -2\p@ \nointerlineskip}
+      $\hfil\displaystyle{#1}\hfil$\crcr
+    }%
+  }%
+}
+
+
+
+\def\goesto
+{%
+  \futurelet\@nextchar\check@goesto@opt
+}
+\def\check@goesto@opt
+{%
+  \ifx*\@nextchar
+    \let\@next\@goestodisplay
+  \else
+    \let\@next\@goesto
+  \fi
+  \@next
+}
+\def\@goesto
+{%
+  \begingroup
+    \@getscripts\@@goesto
+}
+\def\@@goesto
+{%
+    \ifmmode
+      \ifinner
+        \def\@@next{\mathrel{\longrightarrow_{\@subs}^{\@sups}}}%
+      \else
+        \let\@@next\@goestodisplaycode
+      \fi
+    \else
+      \def\@@next{\unskip${}\mathrel{\longrightarrow}{}$\ignorespaces}%
+    \fi
+    \@@next
+  \endgroup
+}
+
+\def\@goestodisplay*{\begingroup\@getscripts\@@goestodisplay}
+\def\@@goestodisplay{\@goestodisplaycode\endgroup}
+
+\def\@goestodisplaycode
+{%
+  \mathrel
+  {%
+    \vcenter
+    {%
+      \m@th
+      \ialign
+      {%
+         ##\crcr
+         $\scriptstyle\;\;\@sups\;\;\normalstrut$\crcr
+         \noalign{\kern -2 pt\nointerlineskip}%
+         \rightarrowfill \crcr
+         \noalign{\kern -2 pt\nointerlineskip}%
+         $\scriptstyle\;\;\@subs\;\;\normalstrut$\crcr
+      }%
+    }%
+  }%
+}
+
+
+
+\def\hextension
+{%
+  \begingroup
+    \@getscripts\@hextension
+}
+\def\@hextension#1#2%
+{%
+    \ifmmode
+      \def\@@next
+      {%
+        \vcenter
+        {%
+          \m@th
+          \ialign
+          {%
+            ####\crcr
+            $\scriptstyle\;\;\@sups\;\;\normalstrut$\crcr
+%           \noalign{\kern -2 pt\nointerlineskip}%
+            $\displaystyle\vphantom{#2}\smash{#1{#2}}$\crcr
+%           \noalign{\kern -2 pt\nointerlineskip}%
+            $\scriptstyle\;\;\@subs\;\;\normalstrut$\crcr
+          }%
+        }%
+      }%
+    \else
+      \def\@@next{$#1{#2}$}%
+    \fi
+    \@@next
+  \endgroup
+}
+
+
+
+
+
+\newif\if@scriptstyle
+\def\incircle#1%
+{%
+  \bgroup
+    \setbox0=\hbox{$\scriptstyle\bigcirc$}%
+    \dimen0=0.5\wd0
+    \count0=9
+    \loop
+      \setbox1=\hbox{\sfsizemap{\count0}#1}%
+      \ifnum\wd1>\ht1 \dimen1=\wd1 \else \dimen1=\ht1 \fi
+      \ifnum\count0<1 \dimen1=-\maxdimen \fi
+    \ifnum\dimen1>\dimen0
+      \advance\count0 by -1
+    \repeat
+    \dimen0=0.5\ht0
+    \advance\dimen0 by -0.5\dp0
+    \advance\dimen0 by -0.5\ht1
+    \raise\dp0\hbox to \wd0 {\rlap{\box0}\hfill\raise\dimen0\box1\hfill}%
+  \egroup
+}
+\def\scriptincircle#1%
+{%
+  \bgroup
+    \setbox0=\hbox{$\scriptscriptstyle\bigcirc$}%
+    \dimen0=0.5\wd0
+    \count0=9
+    \loop
+      \setbox1=\hbox{\sfsizemap{\count0}#1}%
+      \ifnum\wd1>\ht1 \dimen1=\wd1 \else \dimen1=\ht1 \fi
+      \ifnum\count0<1 \dimen1=-\maxdimen \fi
+    \ifnum\dimen1>\dimen0
+      \advance\count0 by -1
+    \repeat
+    \dimen0=0.5\ht0
+    \advance\dimen0 by -0.5\dp0
+    \advance\dimen0 by -0.5\ht1
+    \raise\dp0\hbox to \wd0 {\rlap{\box0}\hfill\raise\dimen0\box1\hfill}%
+  \egroup
+}
+\def\scriptscriptincircle#1%
+{%
+  \bgroup
+    \relsize{-1}%
+    \setbox0=\hbox{$\scriptscriptstyle\bigcirc$}%
+    \dimen0=0.5\wd0
+    \count0=9
+    \loop
+      \setbox1=\hbox{\sfsizemap{\count0}#1}%
+      \ifnum\wd1>\ht1 \dimen1=\wd1 \else \dimen1=\ht1 \fi
+      \ifnum\count0<1 \dimen1=-\maxdimen \fi
+    \ifnum\dimen1>\dimen0
+      \advance\count0 by -1
+    \repeat
+    \dimen0=0.5\ht0
+    \advance\dimen0 by -0.5\dp0
+    \advance\dimen0 by -0.5\ht1
+    \raise\dp0\hbox to \wd0 {\rlap{\box0}\hfill\raise\dimen0\box1\hfill}%
+  \egroup
+}
+
+
+
+
+\ifx\everyspecialsubscript\@undefined \def\everyspecialsubscript{} \fi
+\ifx\everyspecialsuperscript\@undefined \def\everyspecialsuperscript{} \fi
+
+\def\@getscripts#1%
+{%
+    \def\@scriptedcommand{#1}%
+    \def\@subs{\everyspecialsubscript}%
+    \def\@sups{\everyspecialsuperscript}%
+    \@@getscripts
+}
+\def\@@getscripts{\futurelet\@nextchar\@@@getscripts}
+
+\def\@@@getscripts
+{%
+    \@xpa\def\@xpa\@next@\@xpa{\@scriptedcommand}%
+    \ifcat\@nextchar_%
+      \def\@next@{\@getsubs\@@getscripts}%
+    \else
+      \ifcat\@nextchar^\def\@next@{\@getsups\@@getscripts}\fi
+    \fi
+    \@next@
+}
+
+\def\@getsubs#1_#2%
+{%
+  \@xpa\def\@xpa\@subs\@xpa{\@subs #2}%
+  #1%
+}
+
+\def\@getsups#1^#2%
+{%
+  \@xpa\def\@xpa\@sups\@xpa{\@sups #2}%
+  #1%
+}
+
+
+
+
+
+\newbox\normalstrutbox
+\newbox\topstrutbox
+\newbox\bottomstrutbox
+
+\newbox\bigstrutbox
+\newbox\bigtopstrutbox
+\newbox\bigbottomstrutbox
+
+\newbox\Bigstrutbox
+\newbox\Bigtopstrutbox
+\newbox\Bigbottomstrutbox
+
+\newbox\biggstrutbox
+\newbox\biggtopstrutbox
+\newbox\biggbottomstrutbox
+
+\newbox\Biggstrutbox
+\newbox\Biggtopstrutbox
+\newbox\Biggbottomstrutbox
+
+\newdimen\htstrut \htstrut=\ht\strutbox
+\newdimen\dpstrut \dpstrut=\dp\strutbox
+
+\setbox\normalstrutbox = \hbox{\vrule height .7\normalbaselineskip depth .3\normalbaselineskip width \z@}
+\setbox\topstrutbox = \hbox{\vrule height \htstrut depth \z@ width \z@}
+\setbox\bottomstrutbox = \hbox{\vrule height \z@ depth \dpstrut width \z@}
+
+\setbox\bigstrutbox = \hbox{\vrule height 1.5\htstrut depth 2\dpstrut width \z@}
+\setbox\bigtopstrutbox = \hbox{\vrule height 1.5\htstrut depth \z@ width \z@}
+\setbox\bigbottomstrutbox = \hbox{\vrule height \z@ depth 2\dpstrut width \z@}
+
+\setbox\Bigstrutbox = \hbox{\vrule height 2.1213\htstrut depth 2.8284\dpstrut width \z@}
+\setbox\Bigtopstrutbox = \hbox{\vrule height 2.1213\htstrut depth \z@ width \z@}
+\setbox\Bigbottomstrutbox = \hbox{\vrule height \z@ depth 2.8284\dpstrut width \z@}
+
+\setbox\biggstrutbox = \hbox{\vrule height 2.5981\htstrut depth 3.4641\dpstrut width \z@}
+\setbox\biggtopstrutbox = \hbox{\vrule height 2.5981\htstrut depth \z@ width \z@}
+\setbox\biggbottomstrutbox = \hbox{\vrule height \z@ depth 3.4641\dpstrut width \z@}
+
+\setbox\Biggstrutbox = \hbox{\vrule height 3\htstrut depth 4\dpstrut width \z@}
+\setbox\Biggtopstrutbox = \hbox{\vrule height 3\htstrut depth \z@ width \z@}
+\setbox\Biggbottomstrutbox = \hbox{\vrule height \z@ depth 4\dpstrut width \z@}
+
+\def\normalstrut{\relax\ifmmode\copy\normalstrutbox\else\unhcopy\normalstrutbox\fi}
+\def\topstrut{\relax\ifmmode\copy\topstrutbox\else\unhcopy\topstrutbox\fi}
+\def\bottomstrut{\relax\ifmmode\copy\bottomstrutbox\else\unhcopy\bottomstrutbox\fi}
+
+\def\bigstrut{\relax\ifmmode\copy\bigstrutbox\else\unhcopy\bigstrutbox\fi}
+\def\bigtopstrut{\relax\ifmmode\copy\bigtopstrutbox\else\unhcopy\bigtopstrutbox\fi}
+\def\bigbottomstrut{\relax\ifmmode\copy\bigbottomstrutbox\else\unhcopy\bigbottomstrutbox\fi}
+
+\def\Bigstrut{\relax\ifmmode\copy\Bigstrutbox\else\unhcopy\Bigstrutbox\fi}
+\def\Bigtopstrut{\relax\ifmmode\copy\Bigtopstrutbox\else\unhcopy\Bigtopstrutbox\fi}
+\def\Bigbottomstrut{\relax\ifmmode\copy\Bigbottomstrutbox\else\unhcopy\Bigbottomstrutbox\fi}
+
+\def\biggstrut{\relax\ifmmode\copy\biggstrutbox\else\unhcopy\biggstrutbox\fi}
+\def\biggtopstrut{\relax\ifmmode\copy\biggtopstrutbox\else\unhcopy\biggtopstrutbox\fi}
+\def\biggbottomstrut{\relax\ifmmode\copy\biggbottomstrutbox\else\unhcopy\biggbottomstrutbox\fi}
+
+\def\Biggstrut{\relax\ifmmode\copy\Biggstrutbox\else\unhcopy\Biggstrutbox\fi}
+\def\Biggtopstrut{\relax\ifmmode\copy\Biggtopstrutbox\else\unhcopy\Biggtopstrutbox\fi}
+\def\Biggbottomstrut{\relax\ifmmode\copy\Biggbottomstrutbox\else\unhcopy\Biggbottomstrutbox\fi}
+
+
+\def\medbracketskip{\mkern 3 mu\relax}
+\def\smallbracketskip{\mkern 2 mu\relax}
+
+
+
+
+
+\def\sfsizemap#1%
+{%
+  \ifcase#1 \thrsf
+  \or \thrsf
+  \or \thrsf
+  \or \thrsf
+  \or \fousf
+  \or \fivsf
+  \or \sixsf
+  \or \sevsf
+  \or \egtsf
+  \else \ninsf
+  \fi
+}
+
+\def\@halfmag{ scaled \magstephalf}
+\def\@magscale#1{ scaled \magstep#1 }
+\def\@ptscale#1{ scaled #100 }
+\font\thrsf=cmss10 \@ptscale3
+\font\fousf=cmss10 \@ptscale4
+\font\fivsf=cmss10 \@ptscale5
+\font\sixsf=cmss10 \@ptscale6
+\font\sevsf=cmss10 \@ptscale7
+\font\egtsf=cmss10 \@ptscale8
+\font\ninsf=cmss10 \@ptscale9
+
+
+\def\setfontsizeto#1%
+{%
+% For some reason, if there is no switching to the math environment,
+% the font changes do not become effective.  The following `\vbox'
+% is a work around, until the appropriate command has been found.
+% This phenomena showed up in the 1st problem of the exam#1 of EE231
+% in Winter 2000 semester, when no-solution/answers option is set.
+  \vbox to \z@ {\vss\hbox to \z@ {$\relax$}}%
+  \ifcase#1%	%0
+    \@font@warning{Font size #1 doesn't exist as declared}%
+  \or		%1
+    \def\f@size{1}\relax
+    \font\cmr@tsize=cmr5 at 1 pt
+    \font\cmr@ssize=cmr5 at 1 pt
+    \font\cmr@sssize=cmr5 at 1 pt
+    \textfont0=\cmr@tsize   \scriptfont0=\cmr@ssize   \scriptscriptfont0=\cmr@sssize
+    \font\cmmi@tsize=cmmi5 at 1 pt
+    \font\cmmi@ssize=cmmi5 at 1 pt
+    \font\cmmi@sssize=cmmi5 at 1 pt
+    \textfont1=\cmmi@tsize  \scriptfont1=\cmmi@ssize  \scriptscriptfont1=\cmmi@sssize
+    \font\cmsy@tsize=cmsy5 at 1 pt
+    \font\cmsy@ssize=cmsy5 at 1 pt
+    \font\cmsy@sssize=cmsy5 at 1 pt
+    \textfont2=\cmsy@tsize  \scriptfont2=\cmsy@ssize  \scriptscriptfont2=\cmsy@sssize
+    \font\cmex@tsize=cmex7 at 1 pt
+    \font\cmex@ssize=cmex7 at 1 pt
+    \font\cmex@sssize=cmex7 at 1 pt
+    \textfont3=\cmex@tsize  \scriptfont3=\cmex@ssize  \scriptscriptfont3=\cmex@sssize
+    \font\msam@tsize=msam5 at 1 pt
+    \font\msam@ssize=msam5 at 1 pt
+    \font\msam@sssize=msam5 at 1 pt
+    \textfont4=\msam@tsize  \scriptfont4=\msam@ssize  \scriptscriptfont4=\msam@sssize
+    \font\msbm@tsize=msbm5 at 1 pt
+    \font\msbm@ssize=msbm5 at 1 pt
+    \font\msbm@sssize=msbm5 at 1 pt
+    \textfont5=\msbm@tsize  \scriptfont5=\msbm@ssize  \scriptscriptfont5=\msbm@sssize
+    \font\cmbx@tsize=cmbx5 at 1 pt
+    \font\cmbx@ssize=cmbx5 at 1 pt
+    \font\cmbx@sssize=cmbx5 at 1 pt
+    \textfont6=\cmbx@tsize  \scriptfont6=\cmbx@ssize  \scriptscriptfont6=\cmbx@sssize
+    \font\cmmib@tsize=cmmib5 at 1 pt
+    \font\cmmib@ssize=cmmib5 at 1 pt
+    \font\cmmib@sssize=cmmib5 at 1 pt 
+    \textfont7=\cmmib@tsize \scriptfont7=\cmmib@ssize \scriptscriptfont7=\cmmib@sssize
+    \font\cmsy@tsize=cmsy5 at 1 pt
+    \font\cmsy@ssize=cmsy5 at 1 pt
+    \font\cmsy@sssize=cmsy5 at 1 pt
+    \textfont8=\cmsy@tsize  \scriptfont8=\cmsy@ssize  \scriptscriptfont8=\cmsy@sssize
+    \font\verytinyrm=cmr5 at 1 pt
+    \font\verytinybx=cmbx5 at 1 pt
+%%% LaTeX font definitions
+    \def\math@fonts
+    {%
+      \textfont\symoperators=\cmr@tsize
+        \scriptfont\symoperators=\cmr@ssize
+          \scriptscriptfont\symoperators=\cmr@sssize
+      \textfont\symsymbols=\cmmi@tsize
+        \scriptfont\symsymbols=\cmmi@ssize
+          \scriptscriptfont\symsymbols=\cmmi@sssize
+      \textfont2=\cmsy@tsize
+        \scriptfont2=\cmsy@ssize
+          \scriptscriptfont2=\cmsy@sssize
+      \textfont\symlargesymbols=\cmex@tsize
+        \scriptfont\symlargesymbols=\cmex@ssize
+          \scriptscriptfont\symlargesymbols=\cmex@sssize
+      \textfont\symAMSa=\msam@tsize
+        \scriptfont\symAMSa=\msam@ssize
+          \scriptscriptfont\symAMSa=\msam@sssize
+      \textfont\symAMSb=\msbm@tsize
+        \scriptfont\symAMSb=\msbm@ssize
+          \scriptscriptfont\symAMSb=\msbm@sssize
+      \textfont\symboldoperators=\cmbx@tsize
+        \scriptfont\symboldoperators=\cmbx@ssize
+          \scriptscriptfont\symboldoperators=\cmbx@sssize
+      \textfont\symboldletters=\cmmib@tsize
+        \scriptfont\symboldletters=\cmmib@ssize
+          \scriptscriptfont\symboldletters=\cmmib@sssize
+      \textfont\symboldsymbols=\cmsy@tsize
+        \scriptfont\symboldsymbols=\cmsy@ssize
+          \scriptscriptfont\symboldsymbols=\cmsy@sssize
+    }%
+  \or		%2
+    \def\f@size{2}\relax
+    \font\cmr@tsize=cmr5 at 2 pt
+    \font\cmr@ssize=cmr5 at 1 pt
+    \font\cmr@sssize=cmr5 at 1 pt
+    \textfont0=\cmr@tsize   \scriptfont0=\cmr@ssize   \scriptscriptfont0=\cmr@sssize
+    \font\cmmi@tsize=cmmi5 at 2 pt
+    \font\cmmi@ssize=cmmi5 at 1 pt
+    \font\cmmi@sssize=cmmi5 at 1 pt
+    \textfont1=\cmmi@tsize  \scriptfont1=\cmmi@ssize  \scriptscriptfont1=\cmmi@sssize
+    \font\cmsy@tsize=cmsy5 at 2 pt
+    \font\cmsy@ssize=cmsy5 at 1 pt
+    \font\cmsy@sssize=cmsy5 at 1 pt
+    \textfont2=\cmsy@tsize  \scriptfont2=\cmsy@ssize  \scriptscriptfont2=\cmsy@sssize
+    \font\cmex@tsize=cmex7 at 2 pt
+    \font\cmex@ssize=cmex7 at 1 pt
+    \font\cmex@sssize=cmex7 at 1 pt
+    \textfont3=\cmex@tsize  \scriptfont3=\cmex@ssize  \scriptscriptfont3=\cmex@sssize
+    \font\msam@tsize=msam5 at 2 pt
+    \font\msam@ssize=msam5 at 1 pt
+    \font\msam@sssize=msam5 at 1 pt
+    \textfont4=\msam@tsize  \scriptfont4=\msam@ssize  \scriptscriptfont4=\msam@sssize
+    \font\msbm@tsize=msbm5 at 2 pt
+    \font\msbm@ssize=msbm5 at 1 pt
+    \font\msbm@sssize=msbm5 at 1 pt
+    \textfont5=\msbm@tsize  \scriptfont5=\msbm@ssize  \scriptscriptfont5=\msbm@sssize
+    \font\cmbx@tsize=cmbx5 at 2 pt
+    \font\cmbx@ssize=cmbx5 at 1 pt
+    \font\cmbx@sssize=cmbx5 at 1 pt
+    \textfont6=\cmbx@tsize  \scriptfont6=\cmbx@ssize  \scriptscriptfont6=\cmbx@sssize
+    \font\cmmib@tsize=cmmib5 at 2 pt
+    \font\cmmib@ssize=cmmib5 at 1 pt
+    \font\cmmib@sssize=cmmib5 at 1 pt 
+    \textfont7=\cmmib@tsize \scriptfont7=\cmmib@ssize \scriptscriptfont7=\cmmib@sssize
+    \font\cmsy@tsize=cmsy5 at 2 pt
+    \font\cmsy@ssize=cmsy5 at 1 pt
+    \font\cmsy@sssize=cmsy5 at 1 pt
+    \textfont8=\cmsy@tsize  \scriptfont8=\cmsy@ssize  \scriptscriptfont8=\cmsy@sssize
+    \font\verytinyrm=cmr5 at 2 pt
+    \font\verytinybx=cmbx5 at 2 pt
+%%% LaTeX font definitions
+    \def\math@fonts
+    {%
+      \textfont\symoperators=\cmr@tsize
+        \scriptfont\symoperators=\cmr@ssize
+          \scriptscriptfont\symoperators=\cmr@sssize
+      \textfont\symsymbols=\cmmi@tsize
+        \scriptfont\symsymbols=\cmmi@ssize
+          \scriptscriptfont\symsymbols=\cmmi@sssize
+      \textfont2=\cmsy@tsize
+        \scriptfont2=\cmsy@ssize
+          \scriptscriptfont2=\cmsy@sssize
+      \textfont\symlargesymbols=\cmex@tsize
+        \scriptfont\symlargesymbols=\cmex@ssize
+          \scriptscriptfont\symlargesymbols=\cmex@sssize
+      \textfont\symAMSa=\msam@tsize
+        \scriptfont\symAMSa=\msam@ssize
+          \scriptscriptfont\symAMSa=\msam@sssize
+      \textfont\symAMSb=\msbm@tsize
+        \scriptfont\symAMSb=\msbm@ssize
+          \scriptscriptfont\symAMSb=\msbm@sssize
+      \textfont\symboldoperators=\cmbx@tsize
+        \scriptfont\symboldoperators=\cmbx@ssize
+          \scriptscriptfont\symboldoperators=\cmbx@sssize
+      \textfont\symboldletters=\cmmib@tsize
+        \scriptfont\symboldletters=\cmmib@ssize
+          \scriptscriptfont\symboldletters=\cmmib@sssize
+      \textfont\symboldsymbols=\cmsy@tsize
+        \scriptfont\symboldsymbols=\cmsy@ssize
+          \scriptscriptfont\symboldsymbols=\cmsy@sssize
+    }%
+  \or		%3
+    \def\f@size{3}\relax
+    \font\cmr@tsize=cmr5 at 3 pt
+    \font\cmr@ssize=cmr5 at 2 pt
+    \font\cmr@sssize=cmr5 at 2 pt
+    \textfont0=\cmr@tsize   \scriptfont0=\cmr@ssize   \scriptscriptfont0=\cmr@sssize
+    \font\cmmi@tsize=cmmi5 at 3 pt
+    \font\cmmi@ssize=cmmi5 at 2 pt
+    \font\cmmi@sssize=cmmi5 at 2 pt
+    \textfont1=\cmmi@tsize  \scriptfont1=\cmmi@ssize  \scriptscriptfont1=\cmmi@sssize
+    \font\cmsy@tsize=cmsy5 at 3 pt
+    \font\cmsy@ssize=cmsy5 at 2 pt
+    \font\cmsy@sssize=cmsy5 at 2 pt
+    \textfont2=\cmsy@tsize  \scriptfont2=\cmsy@ssize  \scriptscriptfont2=\cmsy@sssize
+    \font\cmex@tsize=cmex7 at 3 pt
+    \font\cmex@ssize=cmex7 at 2 pt
+    \font\cmex@sssize=cmex7 at 2 pt
+    \textfont3=\cmex@tsize  \scriptfont3=\cmex@ssize  \scriptscriptfont3=\cmex@sssize
+    \font\msam@tsize=msam5 at 3 pt
+    \font\msam@ssize=msam5 at 2 pt
+    \font\msam@sssize=msam5 at 2 pt
+    \textfont4=\msam@tsize  \scriptfont4=\msam@ssize  \scriptscriptfont4=\msam@sssize
+    \font\msbm@tsize=msbm5 at 3 pt
+    \font\msbm@ssize=msbm5 at 2 pt
+    \font\msbm@sssize=msbm5 at 2 pt
+    \textfont5=\msbm@tsize  \scriptfont5=\msbm@ssize  \scriptscriptfont5=\msbm@sssize
+    \font\cmbx@tsize=cmbx5 at 3 pt
+    \font\cmbx@ssize=cmbx5 at 2 pt
+    \font\cmbx@sssize=cmbx5 at 2 pt
+    \textfont6=\cmbx@tsize  \scriptfont6=\cmbx@ssize  \scriptscriptfont6=\cmbx@sssize
+    \font\cmmib@tsize=cmmib5 at 3 pt
+    \font\cmmib@ssize=cmmib5 at 2 pt
+    \font\cmmib@sssize=cmmib5 at 2 pt 
+    \textfont7=\cmmib@tsize \scriptfont7=\cmmib@ssize \scriptscriptfont7=\cmmib@sssize
+    \font\cmsy@tsize=cmsy5 at 3 pt
+    \font\cmsy@ssize=cmsy5 at 2 pt
+    \font\cmsy@sssize=cmsy5 at 2 pt
+    \textfont8=\cmsy@tsize  \scriptfont8=\cmsy@ssize  \scriptscriptfont8=\cmsy@sssize
+    \font\verytinyrm=cmr5 at 3 pt
+    \font\verytinybx=cmbx5 at 3 pt
+%%% LaTeX font definitions
+    \def\math@fonts
+    {%
+      \textfont\symoperators=\cmr@tsize
+        \scriptfont\symoperators=\cmr@ssize
+          \scriptscriptfont\symoperators=\cmr@sssize
+      \textfont\symsymbols=\cmmi@tsize
+        \scriptfont\symsymbols=\cmmi@ssize
+          \scriptscriptfont\symsymbols=\cmmi@sssize
+      \textfont2=\cmsy@tsize
+        \scriptfont2=\cmsy@ssize
+          \scriptscriptfont2=\cmsy@sssize
+      \textfont\symlargesymbols=\cmex@tsize
+        \scriptfont\symlargesymbols=\cmex@ssize
+          \scriptscriptfont\symlargesymbols=\cmex@sssize
+      \textfont\symAMSa=\msam@tsize
+        \scriptfont\symAMSa=\msam@ssize
+          \scriptscriptfont\symAMSa=\msam@sssize
+      \textfont\symAMSb=\msbm@tsize
+        \scriptfont\symAMSb=\msbm@ssize
+          \scriptscriptfont\symAMSb=\msbm@sssize
+      \textfont\symboldoperators=\cmbx@tsize
+        \scriptfont\symboldoperators=\cmbx@ssize
+          \scriptscriptfont\symboldoperators=\cmbx@sssize
+      \textfont\symboldletters=\cmmib@tsize
+        \scriptfont\symboldletters=\cmmib@ssize
+          \scriptscriptfont\symboldletters=\cmmib@sssize
+      \textfont\symboldsymbols=\cmsy@tsize
+        \scriptfont\symboldsymbols=\cmsy@ssize
+          \scriptscriptfont\symboldsymbols=\cmsy@sssize
+    }%
+  \or		%4
+    \def\f@size{4}\relax
+    \font\cmr@tsize=cmr5 at 4 pt
+    \font\cmr@ssize=cmr5 at 3 pt
+    \font\cmr@sssize=cmr5 at 2 pt
+    \textfont0=\cmr@tsize   \scriptfont0=\cmr@ssize   \scriptscriptfont0=\cmr@sssize
+    \font\cmmi@tsize=cmmi5 at 4 pt
+    \font\cmmi@ssize=cmmi5 at 3 pt
+    \font\cmmi@sssize=cmmi5 at 2 pt
+    \textfont1=\cmmi@tsize  \scriptfont1=\cmmi@ssize  \scriptscriptfont1=\cmmi@sssize
+    \font\cmsy@tsize=cmsy5 at 4 pt
+    \font\cmsy@ssize=cmsy5 at 3 pt
+    \font\cmsy@sssize=cmsy5 at 2 pt
+    \textfont2=\cmsy@tsize  \scriptfont2=\cmsy@ssize  \scriptscriptfont2=\cmsy@sssize
+    \font\cmex@tsize=cmex7 at 4 pt
+    \font\cmex@ssize=cmex7 at 3 pt
+    \font\cmex@sssize=cmex7 at 2 pt
+    \textfont3=\cmex@tsize  \scriptfont3=\cmex@ssize  \scriptscriptfont3=\cmex@sssize
+    \font\msam@tsize=msam5 at 4 pt
+    \font\msam@ssize=msam5 at 3 pt
+    \font\msam@sssize=msam5 at 2 pt
+    \textfont4=\msam@tsize  \scriptfont4=\msam@ssize  \scriptscriptfont4=\msam@sssize
+    \font\msbm@tsize=msbm5 at 4 pt
+    \font\msbm@ssize=msbm5 at 3 pt
+    \font\msbm@sssize=msbm5 at 2 pt
+    \textfont5=\msbm@tsize  \scriptfont5=\msbm@ssize  \scriptscriptfont5=\msbm@sssize
+    \font\cmbx@tsize=cmbx5 at 4 pt
+    \font\cmbx@ssize=cmbx5 at 3 pt
+    \font\cmbx@sssize=cmbx5 at 2 pt
+    \textfont6=\cmbx@tsize  \scriptfont6=\cmbx@ssize  \scriptscriptfont6=\cmbx@sssize
+    \font\cmmib@tsize=cmmib5 at 4 pt
+    \font\cmmib@ssize=cmmib5 at 3 pt
+    \font\cmmib@sssize=cmmib5 at 2 pt 
+    \textfont7=\cmmib@tsize \scriptfont7=\cmmib@ssize \scriptscriptfont7=\cmmib@sssize
+    \font\cmsy@tsize=cmsy5 at 4 pt
+    \font\cmsy@ssize=cmsy5 at 3 pt
+    \font\cmsy@sssize=cmsy5 at 2 pt
+    \textfont8=\cmsy@tsize  \scriptfont8=\cmsy@ssize  \scriptscriptfont8=\cmsy@sssize
+    \font\verytinyrm=cmr5 at 4 pt
+    \font\verytinybx=cmbx5 at 4 pt
+%%% LaTeX font definitions
+    \def\math@fonts
+    {%
+      \textfont\symoperators=\cmr@tsize
+        \scriptfont\symoperators=\cmr@ssize
+          \scriptscriptfont\symoperators=\cmr@sssize
+      \textfont\symsymbols=\cmmi@tsize
+        \scriptfont\symsymbols=\cmmi@ssize
+          \scriptscriptfont\symsymbols=\cmmi@sssize
+      \textfont2=\cmsy@tsize
+        \scriptfont2=\cmsy@ssize
+          \scriptscriptfont2=\cmsy@sssize
+      \textfont\symlargesymbols=\cmex@tsize
+        \scriptfont\symlargesymbols=\cmex@ssize
+          \scriptscriptfont\symlargesymbols=\cmex@sssize
+      \textfont\symAMSa=\msam@tsize
+        \scriptfont\symAMSa=\msam@ssize
+          \scriptscriptfont\symAMSa=\msam@sssize
+      \textfont\symAMSb=\msbm@tsize
+        \scriptfont\symAMSb=\msbm@ssize
+          \scriptscriptfont\symAMSb=\msbm@sssize
+      \textfont\symboldoperators=\cmbx@tsize
+        \scriptfont\symboldoperators=\cmbx@ssize
+          \scriptscriptfont\symboldoperators=\cmbx@sssize
+      \textfont\symboldletters=\cmmib@tsize
+        \scriptfont\symboldletters=\cmmib@ssize
+          \scriptscriptfont\symboldletters=\cmmib@sssize
+      \textfont\symboldsymbols=\cmsy@tsize
+        \scriptfont\symboldsymbols=\cmsy@ssize
+          \scriptscriptfont\symboldsymbols=\cmsy@sssize
+    }%
+  \or		%5
+    \def\f@size{5}\relax
+    \font\cmr@tsize=cmr5
+    \font\cmr@ssize=cmr5 at 4 pt
+    \font\cmr@sssize=cmr5 at 3 pt
+    \textfont0=\cmr@tsize   \scriptfont0=\cmr@ssize   \scriptscriptfont0=\cmr@sssize
+    \font\cmmi@tsize=cmmi5
+    \font\cmmi@ssize=cmmi5 at 4 pt
+    \font\cmmi@sssize=cmmi5 at 3 pt
+    \textfont1=\cmmi@tsize  \scriptfont1=\cmmi@ssize  \scriptscriptfont1=\cmmi@sssize
+    \font\cmsy@tsize=cmsy5
+    \font\cmsy@ssize=cmsy5 at 4 pt
+    \font\cmsy@sssize=cmsy5 at 3 pt
+    \textfont2=\cmsy@tsize  \scriptfont2=\cmsy@ssize  \scriptscriptfont2=\cmsy@sssize
+    \font\cmex@tsize=cmex7 at 5 pt
+    \font\cmex@ssize=cmex7 at 4 pt
+    \font\cmex@sssize=cmex7 at 3 pt
+    \textfont3=\cmex@tsize  \scriptfont3=\cmex@ssize  \scriptscriptfont3=\cmex@sssize
+    \font\msam@tsize=msam5
+    \font\msam@ssize=msam5 at 4 pt
+    \font\msam@sssize=msam5 at 3 pt
+    \textfont4=\msam@tsize  \scriptfont4=\msam@ssize  \scriptscriptfont4=\msam@sssize
+    \font\msbm@tsize=msbm5
+    \font\msbm@ssize=msbm5 at 4 pt
+    \font\msbm@sssize=msbm5 at 3 pt
+    \textfont5=\msbm@tsize  \scriptfont5=\msbm@ssize  \scriptscriptfont5=\msbm@sssize
+    \font\cmbx@tsize=cmbx5
+    \font\cmbx@ssize=cmbx5 at 4 pt
+    \font\cmbx@sssize=cmbx5 at 3 pt
+    \textfont6=\cmbx@tsize  \scriptfont6=\cmbx@ssize  \scriptscriptfont6=\cmbx@sssize
+    \font\cmmib@tsize=cmmib5
+    \font\cmmib@ssize=cmmib5 at 4 pt
+    \font\cmmib@sssize=cmmib5 at 3 pt 
+    \textfont7=\cmmib@tsize \scriptfont7=\cmmib@ssize \scriptscriptfont7=\cmmib@sssize
+    \font\cmsy@tsize=cmsy5
+    \font\cmsy@ssize=cmsy5 at 4 pt
+    \font\cmsy@sssize=cmsy5 at 3 pt
+    \textfont8=\cmsy@tsize  \scriptfont8=\cmsy@ssize  \scriptscriptfont8=\cmsy@sssize
+    \font\verytinyrm=cmr5
+    \font\verytinybx=cmbx5
+%%% LaTeX font definitions
+    \def\math@fonts
+    {%
+      \textfont\symoperators=\cmr@tsize
+        \scriptfont\symoperators=\cmr@ssize
+          \scriptscriptfont\symoperators=\cmr@sssize
+      \textfont\symsymbols=\cmmi@tsize
+        \scriptfont\symsymbols=\cmmi@ssize
+          \scriptscriptfont\symsymbols=\cmmi@sssize
+      \textfont2=\cmsy@tsize
+        \scriptfont2=\cmsy@ssize
+          \scriptscriptfont2=\cmsy@sssize
+      \textfont\symlargesymbols=\cmex@tsize
+        \scriptfont\symlargesymbols=\cmex@ssize
+          \scriptscriptfont\symlargesymbols=\cmex@sssize
+      \textfont\symAMSa=\msam@tsize
+        \scriptfont\symAMSa=\msam@ssize
+          \scriptscriptfont\symAMSa=\msam@sssize
+      \textfont\symAMSb=\msbm@tsize
+        \scriptfont\symAMSb=\msbm@ssize
+          \scriptscriptfont\symAMSb=\msbm@sssize
+      \textfont\symboldoperators=\cmbx@tsize
+        \scriptfont\symboldoperators=\cmbx@ssize
+          \scriptscriptfont\symboldoperators=\cmbx@sssize
+      \textfont\symboldletters=\cmmib@tsize
+        \scriptfont\symboldletters=\cmmib@ssize
+          \scriptscriptfont\symboldletters=\cmmib@sssize
+      \textfont\symboldsymbols=\cmsy@tsize
+        \scriptfont\symboldsymbols=\cmsy@ssize
+          \scriptscriptfont\symboldsymbols=\cmsy@sssize
+    }%
+  \else
+    \@font@warning{Font size #1 doesn't exist as declared}%
+  \fi
+  \let\check@mathfonts\relax
+  \def\glb@settings
+  {%
+%   \csname S@\f@size\endcsname
+    \ifmath@fonts
+      \begingroup
+        \escapechar\m@ne
+%       \csname mv@\math@version \endcsname
+        \globaldefs\@ne
+        \math@fonts
+        \let\glb@currsize\f@size
+      \endgroup
+      \the\every@math@size
+    \fi
+  }%
+}
+
+
+
+
+
+\ifnotecolor
+  \ifx\blue\@undefined \definecolor{myblue}{rgb}{0,0,1} \def\blue{\color{myblue}} \fi
+  \ifx\darkblue\@undefined \definecolor{mydarkblue}{rgb}{0.0,0.0,0.6}\def\darkblue{\color{mydarkblue}} \fi
+  \ifx\red\@undefined \definecolor{myred}{rgb}{1,0,0} \def\red{\color{myred}} \fi
+  \@xpa\def\@xpa\everyaxiom\@xpa{\everyaxiom\blue}
+  \@xpa\def\@xpa\everydefinition\@xpa{\everydefinition\blue}
+  \@xpa\def\@xpa\everylemma\@xpa{\everylemma\blue}
+  \@xpa\def\@xpa\everytheorem\@xpa{\everytheorem\blue}
+  \@xpa\def\@xpa\everycorollary\@xpa{\everycorollary\blue}
+  \@xpa\def\@xpa\everyexample\@xpa{\everyexample\blue}
+  \@xpa\def\@xpa\everyproof\@xpa{\everyproof\blue}
+  \@xpa\def\@xpa\proofhook\@xpa{\proofhook\blue}
+  \@xpa\def\@xpa\everylaplacetrans\@xpa{\everylaplacetrans\darkblue}
+  \@xpa\def\@xpa\everyfouriertrans\@xpa{\everyfouriertrans\darkblue}
+  \@xpa\def\@xpa\everyztrans\@xpa{\everyztrans\blue}
+  \@xpa\def\@xpa\everywtrans\@xpa{\everywtrans\darkblue}
+  \@xpa\def\@xpa\everycheckmark\@xpa{\everycheckmark\blue}
+  \@xpa\def\@xpa\everycrossmark\@xpa{\everycrossmark\red}
+\else
+% \ifx\black\@undefined \let\black\relax \fi
+  \let\black\relax
+% \ifx\white\@undefined \let\white\relax \fi
+  \let\white\relax
+% \ifx\lightred\@undefined \let\lightred\relax \fi
+  \let\lightred\relax
+% \ifx\red\@undefined \let\red\relax \fi
+  \let\red\relax
+% \ifx\darkred\@undefined \let\darkred\relax \fi
+  \let\darkred\relax
+% \ifx\cyan\@undefined \let\cyan\relax \fi
+  \let\cyan\relax
+% \ifx\darkcyan\@undefined \let\darkcyan\relax \fi
+  \let\darkcyan\relax
+% \ifx\magenta\@undefined \let\magenta\relax \fi
+  \let\magenta\relax
+% \ifx\lightblue\@undefined \let\lightblue\relax \fi
+  \let\lightblue\relax
+% \ifx\blue\@undefined \let\blue\relax \fi
+  \let\blue\relax
+% \ifx\darkblue\@undefined \let\darkblue\relax \fi
+  \let\darkblue\relax
+% \ifx\lightgreen\@undefined \let\lightgreen\relax \fi
+  \let\lightgreen\relax
+% \ifx\green\@undefined \let\green\relax \fi
+  \let\green\relax
+% \ifx\darkgreen\@undefined \let\darkgreen\relax \fi
+  \let\darkgreen\relax
+% \ifx\yellow\@undefined \let\yellow\relax \fi
+  \let\yellow\relax
+% \ifx\darkyellow\@undefined \let\darkyellow\relax \fi
+  \let\darkyellow\relax
+  \def\color{\futurelet\@next@char\check@color@opt}
+  \def\check@color@opt
+  {%
+    \ifx[\@next@char\relax
+      \def\color[##1]##2{}%
+    \else
+      \def\color##1{}%
+    \fi
+  }
+\fi
+

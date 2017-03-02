@@ -1,0 +1,193 @@
+
+\chapter{Results and Observation}
+\label{chap:Res}
+\paragraph{}
+The goal of this work was to give the user a set of functions, that could be used to calculate the third dimension of a point in the image plane and provide visualization of it. The role of point cloud libraries and the OpenCV libraries was instrumental in achieving the task. The library is written in C++ and object oriented programming was used wherever possible. For the purpose of demonstrating the use of these libraries, a small program was written and executed. The code snippet below provides an example on the use of different components in the library. The algorithm is explained in Figure \ref{fig:algo} The program is executed on the host hardware in real time. The program is divided into three parts, first part is the input of images, the second part is the use of the storage functions in the library and part three is to use different functions available for image processing purposes. The contents of the program are given below.
+
+\begin{lstlisting}
+
+#include "function definitions.h" // This header fie needs to be included to use the library. The user does not need to include the general C++ header files as they are already included inside this header file. 
+
+int main ()
+{	
+// Declaring an object of Lines
+	L_List L_object ;
+	\end{lstlisting}
+\pagebreak
+\begin{lstlisting}
+// Declaring an object of Images
+	I_List I_object;
+// Declaring an object of Point
+	P_List P_object;
+// Declaring an object of Motion
+	M_List M_object;
+//Declare objects of two image matrices 
+   	ImageMat *Iinp = new ImageMat;
+    ImageMat *Iinp1 = new ImageMat;
+/* Declare a variable size, which defines what size the input images, should be resized to. Resizing is important because of the computational efficiency which needs to be achieved.*/
+
+ 	Size size(640, 480);
+    
+// Here the filenames for both the images are defined, These filenames could also be files whicha lready stored on the disk.
+	/*
+	string s = "1123.jpg";
+	string s1 = "1124.jpg";
+	*/
+	\end{lstlisting}
+\pagebreak
+\begin{lstlisting}
+// The choice of image acquisition is 2 here but could also be one, where in one loads an image already on the disk. 
+	Iinp = ImageAcquisition(2, s, s, I_object);
+	Iinp1 = ImageAcquisition(2, s1, s1, I_object);
+//Resizing the curent image to a size specified by the user
+	resize(Iinp->img,Iinp->img, size);//resize image
+	resize(Iinp1->img,Iinp1->img, size);
+// Code snippet demonstrates how to use the associative array for storage and how to remove and display keys 
+	/*
+    for (int i =  0 ; i < 10 ; i ++){
+		storeimage(I_object, *Iinp, "Hello");
+ 		cout << "The size of the key is:    "<<I_object.keyouterImages.size()<<endl;
+       	cout << "The size of the key is:    "<<I_object.keytimeImages.size()<<endl; 
+    }
+\end{lstlisting}
+\pagebreak
+\begin{lstlisting}
+ // Store an image using a key "hi"
+	storeimage(I_object, *Iinp, "hi");
+	cout << "The size of the key is:    "<<I_object.keyouterImages.size()<<endl;
+    cout << "The size of the key is:    "<<I_object.keytimeImages.size()<<endl; 
+
+// This is how to remove an image
+  	cout << "Now removing "<< endl;
+
+    time_t t = time(0);
+   	eraseimages(I_object, t, "Hello");
+	cout << "The size of the key is:    "<<I_object.keyouterImages.size()<<endl;
+    cout << "The size of the key is:    "<<I_object.keytimeImages.size()<<endl; 
+ */
+
+// This set of code calculates and outputs the wireframe for each of the two images.
+/*
+   Iinp=  PrelimEdgeDetection(Iinp, "EdgeImage1", I_object);
+\end{lstlisting}
+\pagebreak
+\begin{lstlisting}
+
+   Iinp = VerticesDetection(Iinp, "VERTICESMAGE1", P_object, L_object, I_object);
+ 
+   Iinp1=  PrelimEdgeDetection(Iinp1 , "EdgeImage2",I_object);
+
+   Iinp1 = VerticesDetection(Iinp1, "VERTICESMAGE2", P_object, L_object, I_object);
+*/
+
+// Defining objects for the calculation of features adn motion map 
+cv::Mat K , Kinv;
+cv::Mat cam_matrix, distortion_coeff;
+std::vector<CloudPoint> pointcloud;
+std::vector<cv::KeyPoint> correspImg1Pt;
+
+// Read the camera internal parameters from the file 
+cv::FileStorage fs;
+fs.open("out_camera_data.xml", cv::FileStorage::READ);
+fs["Camera_Matrix"]>>cam_matrix;
+fs["Distortion_Coefficients"]>>distortion_coeff;
+K = cam_matrix;
+invert(K, Kinv); //get inverse of camera matrix
+cout<< "cam matrixes"<< K<< endl;
+\end{lstlisting}
+\pagebreak
+\begin{lstlisting}
+// Declaring variables for the calculation of camera matrices
+vector<KeyPoint> pt1, pt2;
+vector<KeyPoint> imgpts1;
+vector<KeyPoint> imgpts2;
+vector<KeyPoint> imgpts1_good;
+vector<KeyPoint> imgpts2_good;
+vector<DMatch>   match;
+
+    Matx34d    P = cv::Matx34d(1,0,0,0,
+						0,1,0,0,
+						0,0,1,0);
+	Matx34d    P1 = cv::Matx34d(1,0,0,50,
+						 0,1,0,0,
+						 0,0,1,0);
+
+// calculates the motion map which basically calculates the optical flow in the image.
+int sp =  CalculateMotionMap(Iinp->img, Iinp1->img, imgpts1, imgpts2, pt1, pt2, imgpts1_good, imgpts2_good, match);
+
+// Finds the fundamental and the essential matrix . Here the values P and P1 are the camera matrices . This value may be stored by the user to track motion.
+FindCameraMatrices( K, Kinv, distortion_coeff, imgpts1, imgpts2, imgpts1_good, imgpts2_good, P, P1, match, pointcloud);
+
+\end{lstlisting}
+\pagebreak
+\begin{lstlisting}
+// Convert the triangulated points into point cloud which is compatible with the point Cloud library . this library provides the visualisation necessary .
+for (unsigned int i = 0 ; i < pointcloud.size(); i++){
+    cout<<pointcloud[i].pt.x<<" , "<<pointcloud[i].pt.y<<" , "<<pointcloud[i].pt.z<<endl;
+}
+int size1 = pointcloud.size();
+cout<<size1<<endl;
+point *temppoint = new point[size1];
+temppoint = Recoverpoint( pointcloud, temppoint);
+for (unsigned int i = 0 ; i < pointcloud.size(); i++){
+    cout<<temppoint[i].P.x<<" , "<<temppoint[i].P.y<<" , "<<temppoint[i].P.z<<endl;
+}
+
+// Declare a PCL recognised point cloud
+pcl::PointCloud<pcl::PointXYZ>::Ptr point_display(new pcl::PointCloud<pcl::PointXYZ> ());
+
+point_display = convertintopointcloud(temppoint, point_display,pointcloud.size());
+
+// Display the visualization
+visualization(point_display);
+\end{lstlisting}
+\pagebreak
+\begin{lstlisting}	
+// Calcualte the polygonal mesh to demonstate the surface normals 
+pcl::PolygonMesh triangles;
+
+triangles = pointcloudmesh(point_display);
+
+//     // namedWindow("Contours", CV_WINDOW_AUTOSIZE );
+    
+//     // imshow("Contours", Iinp1->img);
+  
+//     // waitKey(0);
+
+
+// Delete all the memory references.
+delete temppoint; 
+delete Iinp; 
+delete Iinp1;
+K.release();
+Kinv.release();
+cam_matrix.release();
+distortion_coeff.release();
+return 0; 
+
+}
+
+\end{lstlisting}
+
+\begin{figure} [ht] 
+    \centering
+    \includegraphics[width=20cm,height=20cm,keepaspectratio]{Pictures/full}
+    \caption{Algorithm of the System}
+    \label{fig:algo}
+\end{figure}
+
+
+\paragraph{Key Points about the Library}
+
+\begin{itemize}
+\item  The header file declaration.h must be included in the code to use the library. There are some prequisite requirements for running the library. The library can be executed outside of the host computer with a webcam camera or using a stored set of images, The only issue, that the user would have to careful with, would be the installation of OpenCV and PCL library. 
+
+\item The code snippet written above has the ability to input images from the camera and to triangulate its points for 3D. There are a few limitations of the library, that were observed during the testing and experimentation. The calculation of an accurate Fundamental matrix and essential matrix is only feasible when there are more than 100 point features detected in the image. It was observed that if few features are used then the Essential matrix ends up with a zero determinant which is bad for triangulation process.
+
+\item It was also observed that using the wireframe is extremely difficult to get more than 100 feature matches. Even though the function could work with a wireframe, it could not generate a dense point cloud with it. Hence it became necessary to use the gray scale images to calculate the camera matrices. 
+
+\item Another limitation is the size of the input images. The hardware became very overloaded when a picture from a 12 megapixel camera is processed. It almost took half an hour to calculate all the camera matrices. To overcome this problem a resize function with variable size was introduced. 
+
+\item Camera Calibration is very important in the system. Without the correct camera matrix it is not possible to find the required triangulation and the third coordinate.
+
+\end{itemize}

@@ -1,0 +1,20 @@
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
+<!ENTITY introduction SYSTEM "introduction.sgml">
+<!ENTITY kernel SYSTEM "kernel.sgml">
+<!ENTITY libaim104 SYSTEM "libaim104.sgml">
+<!ENTITY java SYSTEM "java.sgml">
+<!ENTITY installation SYSTEM "installation.sgml">
+]>
+<book id="linux-aim104-drivers">
+<bookinfo>
+<title>Linux AIM104 drivers</title>
+<copyright><year>2002</year> <holder>Arcom Control Systems Ltd</holder></copyright>
+</bookinfo>
+
+&introduction;
+&kernel;
+&libaim104;
+&java;
+&installation;
+
+</book>

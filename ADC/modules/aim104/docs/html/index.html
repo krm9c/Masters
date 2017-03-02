@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Linux AIM104 drivers</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="NEXT"
+TITLE="Introduction"
+HREF="introduction.html"></HEAD
+><BODY
+CLASS="BOOK"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="BOOK"
+><A
+NAME="LINUX-AIM104-DRIVERS"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="TITLE"
+><A
+NAME="AEN2"
+>Linux AIM104 drivers</A
+></H1
+><P
+CLASS="COPYRIGHT"
+>Copyright &copy; 2002 Arcom Control Systems Ltd</P
+><HR></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="introduction.html"
+>Introduction</A
+></DT
+><DT
+>1. <A
+HREF="kernel.html"
+>Kernel drivers</A
+></DT
+><DD
+><DL
+><DT
+>1.1. <A
+HREF="kernel.html#AIM104-O"
+>aim104.o</A
+></DT
+><DT
+>1.2. <A
+HREF="aim104-board-module.html"
+>AIM104 board modules</A
+></DT
+><DD
+><DL
+><DT
+>1.2.1. <A
+HREF="aim104-board-module.html#MODULE-PARAMETERS"
+>Module parameters</A
+></DT
+></DL
+></DD
+><DT
+>1.3. <A
+HREF="low-level-c-interface.html"
+>Low level C interface</A
+></DT
+><DD
+><DL
+><DT
+>1.3.1. <A
+HREF="low-level-c-interface.html#AIM104-RELAY8-MODULE"
+>aim104-relay8.o</A
+></DT
+><DT
+>1.3.2. <A
+HREF="low-level-c-interface.html#AIM104-IN16-MODULE"
+>aim104-in16.o</A
+></DT
+><DT
+>1.3.3. <A
+HREF="low-level-c-interface.html#AIM104-OUT16-MODULE"
+>aim104-out16.o</A
+></DT
+><DT
+>1.3.4. <A
+HREF="low-level-c-interface.html#AIM104-IO32-MODULE"
+>aim104-io32.o</A
+></DT
+><DT
+>1.3.5. <A
+HREF="low-level-c-interface.html#AIM104-MULTI-IO-MODULES"
+>aim104-multi-io.o</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>2. <A
+HREF="libaim104.html"
+>libaim104</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="libaim104-relay8.html"
+>AIM104-RELAY8/IN8</A
+>&nbsp;--&nbsp;access an AIM104-RELAY8/IN8 board</DT
+><DT
+><A
+HREF="libaim104-in16.html"
+>AIM104-IN16</A
+>&nbsp;--&nbsp;access an AIM104-IN16 board</DT
+><DT
+><A
+HREF="libaim104-out16.html"
+>AIM104-OUT16</A
+>&nbsp;--&nbsp;access an AIM104-OUT16 board</DT
+><DT
+><A
+HREF="libaim104-io32.html"
+>AIM104-IO32</A
+>&nbsp;--&nbsp;access an AIM104-IO32 board</DT
+><DT
+><A
+HREF="libaim104-multi-io.html"
+>AIM104-MULTI-IO</A
+>&nbsp;--&nbsp;access an AIM104-MULTI-IO board</DT
+></DL
+></DD
+><DT
+>3. <A
+HREF="java.html"
+>Java classes</A
+></DT
+><DT
+>A. <A
+HREF="installation.html"
+>Installation</A
+></DT
+><DD
+><DL
+><DT
+>A.1. <A
+HREF="installation.html#COMPILATION"
+>Compilation</A
+></DT
+><DT
+>A.2. <A
+HREF="installation-host.html"
+>Installation - host</A
+></DT
+><DT
+>A.3. <A
+HREF="installation-target.html"
+>Installation - target</A
+></DT
+></DL
+></DD
+></DL
+></DIV
+><DIV
+CLASS="LOT"
+><DL
+CLASS="LOT"
+><DT
+><B
+>List of Tables</B
+></DT
+><DT
+>1-1. <A
+HREF="aim104-board-module.html#BOARD-MODULES-TABLE"
+>Board modules</A
+></DT
+><DT
+>1-2. <A
+HREF="aim104-board-module.html#MODULE-PARAMETERS-TABLE"
+>Module parameters</A
+></DT
+><DT
+>1-3. <A
+HREF="low-level-c-interface.html#AIM104-MIO-IOC-CHANNEL-DEFINES"
+>AIM104_MIO_IOC_CHANNEL #define's</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="LOT"
+><DL
+CLASS="LOT"
+><DT
+><B
+>List of Examples</B
+></DT
+><DT
+>1-1. <A
+HREF="kernel.html#LOADING-AIM104-MODULE-EXAMPLE"
+>Loading the aim104.o module</A
+></DT
+><DT
+>1-2. <A
+HREF="aim104-board-module.html#LOADING-AIM104-RELAY8-MODULE-EXAMPLE"
+>Loading the aim104-relay8.o module</A
+></DT
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="introduction.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Introduction</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

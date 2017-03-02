@@ -1,0 +1,444 @@
+<chapter id="libaim104">
+<title>libaim104</title>
+
+<para>
+In addition to the low level system call interface to the kernel
+drivers there is a C library (libaim104) providing a number of
+functions to access the different boards.
+</para>
+
+<para>
+The function declarations are in <filename>arcom/libaim104.h</filename>.
+The library itself is the shared library
+<filename>libaim104.so.<replaceable>x</replaceable>.<replaceable>y</replaceable>.<replaceable>z</replaceable></filename>.
+</para>
+
+<para>
+Before any of the function can be used the device must by opened with
+the <function>open()</function> system call.  The file descriptor
+returned by this call is then passed to each of the functions.
+</para>
+
+<para>
+The device must be closed after use with the
+<function>close()</function> system call.
+</para>
+
+<!--=======================================================================-->
+<refentry id="libaim104-relay8">
+
+<refmeta>
+<refentrytitle>AIM104-RELAY8/IN8</refentrytitle>
+</refmeta>
+
+<refnamediv>
+  <refname>aim104_relay8_enable_relays</refname>
+  <refname>aim104_relay8_set_all</refname>
+  <refname>aim104_relay8_inputs</refname>
+  <refname>aim104_relay8_relay_status</refname>
+  <refpurpose>access an AIM104-RELAY8/IN8 board</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+
+<funcsynopsis>
+<funcsynopsisinfo>
+#include &lt;arcom/libaim104.h&gt;
+</funcsynopsisinfo>
+<funcprototype>
+  <funcdef>int <function>aim104_relay8_enable_relays</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+  <paramdef>int <parameter>enable</parameter></paramdef>
+</funcprototype>
+
+<funcprototype>
+  <funcdef>int <function>aim104_relay8_set_all</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+  <paramdef>unsigned char <parameter>set</parameter></paramdef>
+</funcprototype>
+
+<funcprototype>
+  <funcdef>int <function>aim104_relay8_set_masked</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+  <paramdef>unsigned char <parameter>mask</parameter></paramdef>
+  <paramdef>unsigned char <parameter>set</parameter></paramdef>
+</funcprototype>
+
+<funcprototype>
+  <funcdef>int <function>aim104_relay8_inputs</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+</funcprototype>
+
+<funcprototype>
+  <funcdef>int <function>aim104_relay8_relay_status</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+</funcprototype>
+</funcsynopsis>
+
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>
+<function>aim104_relay8_enable_relays()</function> enables
+(<varname>enable</varname> is true/non-zero) or disables
+(<varname>enable</varname> is false/zero) all the relays.
+</para>
+<para>
+<function>aim104_relay8_set_all()</function> sets all 8 relays to the state
+given by <varname>set</varname>.
+</para>
+<para>
+<function>aim104_relay8_set_masked()</function> sets the all 8 relays to the
+state given by <varname>set</varname> <emphasis>except</emphasis> that relays
+not included in the <varname>mask</varname> bit-mask are not changed.
+</para>
+<para>
+<function>aim104_relay8_inputs()</function> returns the state of the 8 digital
+I/O lines.
+</para>
+<para>
+<function>aim104_relay8_relay_status()</function> returns the current state of
+the 8 relays.
+</para>
+</refsect1>
+
+<refsect1><title>Return Values</title>
+<para>
+All functions return 0 or an 8 bit unsigned value on success.  A negative
+value is returned when an error occurs.
+</para>
+<para>
+The error codes are:
+</para>
+<programlisting>
+enum {
+    AIM104_SUCCESS = 0, /* Success -- no error occurred. */
+    AIM104_EIO = -20,   /* Low level I/O error -- check errno for details. */
+};
+</programlisting>
+</refsect1>
+
+</refentry>
+
+<!--=======================================================================-->
+<refentry id="libaim104-in16">
+<refmeta>
+<refentrytitle>AIM104-IN16</refentrytitle>
+</refmeta>
+
+<refnamediv>
+  <refname>aim104_in16_inputs</refname>
+  <refpurpose>access an AIM104-IN16 board</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+
+<funcsynopsis>
+<funcsynopsisinfo>
+#include &lt;arcom/libaim104.h&gt;
+</funcsynopsisinfo>
+<funcprototype>
+  <funcdef>int <function>aim104_in16_inputs</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+  <paramdef>int <parameter>channel</parameter></paramdef>
+</funcprototype>
+</funcsynopsis>
+
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>
+<function>aim104_in16_inputs()</function> returns the state of 8 of the digital
+I/O lines.  A <varname>channel</varname> of 0 or 1 corresponds to lines 0-7 or
+8-15 respectively.
+</para>
+</refsect1>
+
+<refsect1><title>Return Values</title>
+<para>
+All functions return 0 or an 8 bit unsigned value on success.  A negative
+value is returned when an error occurs.
+</para>
+<para>
+The error codes are:
+</para>
+<programlisting>
+enum {
+    AIM104_SUCCESS = 0,        /* Success -- no error occurred. */
+    AIM104_EBAD_CHANNEL = -10, /* channel was not 0 or 1. */
+    AIM104_EIO = -20,          /* Low level I/O error -- check errno for details. */
+};
+</programlisting>
+</refsect1>
+
+</refentry>
+
+<!--=======================================================================-->
+<refentry id="libaim104-out16">
+<refmeta>
+<refentrytitle>AIM104-OUT16</refentrytitle>
+</refmeta>
+
+<refnamediv>
+  <refname>aim104_out16_enable_outputs</refname>
+  <refname>aim104_out16_set_all</refname>
+  <refname>aim104_out16_set_masked</refname>
+  <refname>aim104_out16_output_status</refname>
+  <refpurpose>access an AIM104-OUT16 board</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+
+<funcsynopsis>
+<funcsynopsisinfo>
+#include &lt;arcom/libaim104.h&gt;
+</funcsynopsisinfo>
+<funcprototype>
+  <funcdef>int <function>aim104_out16_enable_outputs</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+  <paramdef>int <parameter>enable</parameter></paramdef>
+</funcprototype>
+
+<funcprototype>
+  <funcdef>int <function>aim104_out16_set_all</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+  <paramdef>int <parameter>channel</parameter></paramdef>
+  <paramdef>unsigned char <parameter>set</parameter></paramdef>
+</funcprototype>
+
+<funcprototype>
+  <funcdef>int <function>aim104_out16_set_masked</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+  <paramdef>int <parameter>channel</parameter></paramdef>
+  <paramdef>unsigned char <parameter>mask</parameter></paramdef>
+  <paramdef>unsigned char <parameter>set</parameter></paramdef>
+</funcprototype>
+
+<funcprototype>
+  <funcdef>int <function>aim104_out16_output_status</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+  <paramdef>int <parameter>channel</parameter></paramdef>
+</funcprototype>
+</funcsynopsis>
+
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>
+<function>aim104_out16_enable_outputs()</function> enables
+(<varname>enable</varname> is true/non-zero) or disables
+(<varname>enable</varname> is false/zero) all the outputs.
+</para>
+<para>
+The following functions operate on 8 lines at a line.
+A <varname>channel</varname> of 0 or 1 corresponds to lines 0-7 or 8-15
+respectively.
+</para>
+<para>
+<function>aim104_out16_set_all()</function> sets 8 outputs to the state
+given by <varname>set</varname>.
+</para>
+<para>
+<function>aim104_out16_set_masked()</function> sets 8 outputs to the
+state given by <varname>set</varname> <emphasis>except</emphasis> that outputs
+not included in the <varname>mask</varname> bit-mask are not changed.
+</para>
+<para>
+<function>aim104_out16_output_status()</function> returns the current state of
+8 outputs.
+</para>
+</refsect1>
+
+<refsect1><title>Return Values</title>
+<para>
+All functions return 0 or an 8 bit unsigned value on success.  A negative
+value is returned when an error occurs.
+</para>
+<para>
+The error codes are:
+</para>
+<programlisting>
+enum {
+    AIM104_SUCCESS = 0,        /* Success -- no error occurred. */
+    AIM104_EBAD_CHANNEL = -10, /* channel was not 0 or 1. */
+    AIM104_EIO = -20,          /* Low level I/O error -- check errno for details. */
+};
+</programlisting>
+</refsect1>
+
+</refentry>
+
+<!--=======================================================================-->
+<refentry id="libaim104-io32">
+<refmeta>
+<refentrytitle>AIM104-IO32</refentrytitle>
+</refmeta>
+
+<refnamediv>
+  <refname>aim104_io32_enable_outputs</refname>
+  <refname>aim104_io32_set_all</refname>
+  <refname>aim104_io32_inputs</refname>
+  <refpurpose>access an AIM104-IO32 board</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+
+<funcsynopsis>
+<funcsynopsisinfo>
+#include &lt;arcom/libaim104.h&gt;
+</funcsynopsisinfo>
+<funcprototype>
+  <funcdef>int <function>aim104_io32_enable_outputs</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+  <paramdef>int <parameter>enable</parameter></paramdef>
+</funcprototype>
+
+<funcprototype>
+  <funcdef>int <function>aim104_io32_set_all</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+  <paramdef>int <parameter>channel</parameter></paramdef>
+  <paramdef>unsigned char <parameter>set</parameter></paramdef>
+</funcprototype>
+
+<funcprototype>
+  <funcdef>int <function>aim104_io32_inputs</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+  <paramdef>int <parameter>channel</parameter></paramdef>
+</funcprototype>
+</funcsynopsis>
+
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>
+<function>aim104_io32_enable_outputs()</function> enables
+(<varname>enable</varname> is true/non-zero) or disables
+(<varname>enable</varname> is false/zero) all the outputs.
+</para>
+<para>
+The following functions operate on 8 lines at a line.
+A <varname>channel</varname> of 0, 1, 2, or 3 corresponds to lines 0-7, 8-15,
+16-23, or 24-31 respectively.
+</para>
+<para>
+<function>aim104_io32_set_all()</function> sets 8 outputs to the state
+given by <varname>set</varname>.  <varname>in_mask</varname> is a bit mask of
+lines that are connected as inputs &mdash; these will always be driven low.
+</para>
+<para>
+<function>aim104_io32_inputs()</function> returns the status of the inputs
+lines given by the bit-mask <varname>in_mask</varname>.
+</para>
+</refsect1>
+
+<refsect1><title>Return Values</title>
+<para>
+All functions return 0 or an 8 bit unsigned value on success.  A negative
+value is returned when an error occurs.
+</para>
+<para>
+The error codes are:
+</para>
+<programlisting>
+enum {
+    AIM104_SUCCESS = 0,        /* Success -- no error occurred. */
+    AIM104_EBAD_CHANNEL = -10, /* channel was not 0, 1, 2, or 3. */
+    AIM104_EIO = -20,          /* Low level I/O error -- check errno for details. */
+};
+</programlisting>
+</refsect1>
+
+<refsect1><title>Notes</title>
+<para>
+Since there is no way to obtain the current output status or which
+lines are connected as inputs from the board the application must
+store this information as required.  Since all the functions that
+manipulate the I/O lines take a bit mask of the inputs it is recommend
+that this is stored in a variable or set as a constant.
+</para>
+</refsect1>
+
+</refentry>
+
+<!--=======================================================================-->
+<refentry id="libaim104-multi-io">
+<refmeta>
+<refentrytitle>AIM104-MULTI-IO</refentrytitle>
+</refmeta>
+
+<refnamediv>
+  <refname>aim104_multi_io_inputs</refname>
+  <refname>aim104_multi_io_ADC</refname>
+  <refname>aim104_multi_io_DAC</refname>
+  <refpurpose>access an AIM104-MULTI-IO board</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+
+<funcsynopsis>
+<funcsynopsisinfo>
+#include &lt;arcom/libaim104.h&gt;
+</funcsynopsisinfo>
+<funcprototype>
+  <funcdef>int <function>aim104_multi_io_inputs</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+</funcprototype>
+
+<funcprototype>
+  <funcdef>int <function>aim104_multi_io_ADC</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+  <paramdef>int <parameter>channel</parameter></paramdef>
+  <paramdef>int <parameter>single_ended</parameter></paramdef>
+</funcprototype>
+
+<funcprototype>
+  <funcdef>int <function>aim104_multi_io_DAC</function></funcdef>
+  <paramdef>int <parameter>fd</parameter></paramdef>
+  <paramdef>int <parameter>channel</parameter></paramdef>
+  <paramdef>unsigned short <parameter>output</parameter></paramdef>
+</funcprototype>
+</funcsynopsis>
+
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>
+<function>aim104_multi_io_inputs()</function> returns the status of the 8
+digital input lines.
+</para>
+<para>
+<function>aim104_multi_io_ADC()</function> return a value read from one of the
+ADC inputs. For an ADC input connected in single ended mode
+<varname>single_ended</varname> must be set to true/non-zero and
+<varname>channel</varname> must be between 0 and 15 inclusive.  For an ADC
+input connected in differential mode <varname>single_ended</varname> must be
+set to false/zero and <varname>channel</varname> must be between 0 and 7
+inclusive.
+</para>
+<para>
+<function>aim104_multi_io_DAC()</function> writes the 12 bit unsigned value
+(0-4095) <varname>output</varname> to DAC <varname>channel</varname> 0 or 1.
+</para>
+</refsect1>
+
+<refsect1><title>Return Values</title>
+<para>
+All functions return 0 or an 8 bit unsigned value on success.  A negative
+value is returned when an error occurs.
+</para>
+<para>
+The error codes are:
+</para>
+<programlisting>
+enum {
+    AIM104_SUCCESS = 0,        /* Success -- no error occurred. */
+    AIM104_EBAD_CHANNEL = -10, /* channel was not 0, 1, 2, or 3. */
+    AIM104_EIO = -20,          /* Low level I/O error -- check errno for details. */
+    AIM104_ERANGE = -30,       /* Value to write to DAC was greater than 4095. */
+};
+</programlisting>
+</refsect1>
+
+</refentry>
+
+</chapter>

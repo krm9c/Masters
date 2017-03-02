@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>libaim104</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Linux AIM104 drivers"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Low level C interface"
+HREF="low-level-c-interface.html"><LINK
+REL="NEXT"
+TITLE="AIM104-RELAY8/IN8"
+HREF="libaim104-relay8.html"></HEAD
+><BODY
+CLASS="CHAPTER"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux AIM104 drivers</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="low-level-c-interface.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="libaim104-relay8.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="CHAPTER"
+><H1
+><A
+NAME="LIBAIM104"
+></A
+>Chapter 2. libaim104</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="libaim104-relay8.html"
+>AIM104-RELAY8/IN8</A
+>&nbsp;--&nbsp;access an AIM104-RELAY8/IN8 board</DT
+><DT
+><A
+HREF="libaim104-in16.html"
+>AIM104-IN16</A
+>&nbsp;--&nbsp;access an AIM104-IN16 board</DT
+><DT
+><A
+HREF="libaim104-out16.html"
+>AIM104-OUT16</A
+>&nbsp;--&nbsp;access an AIM104-OUT16 board</DT
+><DT
+><A
+HREF="libaim104-io32.html"
+>AIM104-IO32</A
+>&nbsp;--&nbsp;access an AIM104-IO32 board</DT
+><DT
+><A
+HREF="libaim104-multi-io.html"
+>AIM104-MULTI-IO</A
+>&nbsp;--&nbsp;access an AIM104-MULTI-IO board</DT
+></DL
+></DIV
+><P
+>In addition to the low level system call interface to the kernel
+drivers there is a C library (libaim104) providing a number of
+functions to access the different boards.</P
+><P
+>The function declarations are in <TT
+CLASS="FILENAME"
+>arcom/libaim104.h</TT
+>.
+The library itself is the shared library
+<TT
+CLASS="FILENAME"
+>libaim104.so.<TT
+CLASS="REPLACEABLE"
+><I
+>x</I
+></TT
+>.<TT
+CLASS="REPLACEABLE"
+><I
+>y</I
+></TT
+>.<TT
+CLASS="REPLACEABLE"
+><I
+>z</I
+></TT
+></TT
+>.</P
+><P
+>Before any of the function can be used the device must by opened with
+the <CODE
+CLASS="FUNCTION"
+>open()</CODE
+> system call.  The file descriptor
+returned by this call is then passed to each of the functions.</P
+><P
+>The device must be closed after use with the
+<CODE
+CLASS="FUNCTION"
+>close()</CODE
+> system call.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="low-level-c-interface.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="libaim104-relay8.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Low level C interface</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>AIM104-RELAY8/IN8</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,425 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Low level C interface</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Linux AIM104 drivers"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Kernel drivers"
+HREF="kernel.html"><LINK
+REL="PREVIOUS"
+TITLE="AIM104 board modules"
+HREF="aim104-board-module.html"><LINK
+REL="NEXT"
+TITLE="libaim104"
+HREF="libaim104.html"></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux AIM104 drivers</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="aim104-board-module.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 1. Kernel drivers</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="libaim104.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="LOW-LEVEL-C-INTERFACE"
+>1.3. Low level C interface</A
+></H1
+><P
+>Access to the boards from C is via the device node and the standard
+file I/O system calls (<CODE
+CLASS="FUNCTION"
+>open()</CODE
+>,
+<CODE
+CLASS="FUNCTION"
+>close()</CODE
+>, <CODE
+CLASS="FUNCTION"
+>read()</CODE
+>,
+<CODE
+CLASS="FUNCTION"
+>write()</CODE
+> and <CODE
+CLASS="FUNCTION"
+>ioctl()</CODE
+>).</P
+><P
+>The header file <TT
+CLASS="FILENAME"
+>linux/arcom/aim104.h</TT
+> must be included to
+use any of the ioctl #defines.</P
+><P
+>The driver handles the bit flipping so: 1 always means an output is
+ON or an input is HIGH; and 0 always means an output is OFF or an input is
+LOW.</P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AIM104-RELAY8-MODULE"
+>1.3.1. aim104-relay8.o</A
+></H2
+><P
+>All the relays can be enabled or disabled by the AIM104_R8_IOC_ENABLE ioctl.  The ioctl's argument is an integer (0 - disable, 1 - enable).</P
+><P
+>The eight digital inputs are accessed by reading a single byte from
+the device.</P
+><P
+>The eight relays are set by writing a single byte to the device.</P
+><P
+>The current status of the relays (on or off) is obtained with an
+<CODE
+CLASS="FUNCTION"
+>ioctl()</CODE
+> - AIM104_R8_IOC_STATUS.  A positive return value contains the
+relay status in the lowest byte (a negative return value indicates an
+error as usual).</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AIM104-IN16-MODULE"
+>1.3.2. aim104-in16.o</A
+></H2
+><P
+>The 16 digital inputs are accessed by reading two bytes from the
+device.  Single byte reads will alternate between the low byte and
+high byte of the inputs.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AIM104-OUT16-MODULE"
+>1.3.3. aim104-out16.o</A
+></H2
+><P
+>All the outputs can be enabled or disabled by the
+AIM104_OUT16_IOC_ENABLE ioctl.  The ioctl's argument is an integer (0
+- disable, 1 - enable).</P
+><P
+>The 16 digital outputs are set by writing two bytes to the device.
+Single byte writes will alternate between the low byte and high byte
+of the outputs.</P
+><P
+>The AIM104_OUT16_STATUS ioctl can be used to obtain the current status
+of the outputs.  The status is returned in the low two bytes of the
+return value (with a negative value meaning an error occurred).</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AIM104-IO32-MODULE"
+>1.3.4. aim104-io32.o</A
+></H2
+><P
+>All the outputs can be enabled or disabled by the
+AIM104_IO32_IOC_ENABLE ioctl.  The ioctl's argument is an integer (0
+- disable, 1 - enable).</P
+><P
+>The 32 digital inputs are accessed by reading four bytes from the device.
+Single byte reads will get inputs 0-7, 8-15, 16-23, then 24-31 before
+wrapping back to 0-7.  Before an input can be read the corresponding
+output must be set to 0 (i.e. OFF).</P
+><P
+>The 32 digital outputs are set by writing four bytes to the device.
+Single byte writes will set outputs 0-7, 8-15, 16-23, then 24-31
+before wrapping back to 0-7.</P
+><P
+>To ensure correct operation set the outputs (this includes setting
+the bits which will be inputs to 0) before enabling the outputs.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="AIM104-MULTI-IO-MODULES"
+>1.3.5. aim104-multi-io.o</A
+></H2
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN119"
+>1.3.5.1. Selecting an I/O channel</A
+></H3
+><P
+>Before any input or output can be performed the I/O channel must be
+selected with the AIM104_MIO_IOC_CHANNEL ioctl.  The ioctl can be used
+to select the input channel, output channel or both by specifying an
+integer parameter.  The <TT
+CLASS="FILENAME"
+>linux/arcom/aim104.h</TT
+>
+header file contains #define's for the different channels.  Specifying
+only an input channel will not affect the current output channel (and
+vice-versa).  Or (with the '|' operator) an input and output channel
+to set both with one ioctl.</P
+><P
+><DIV
+CLASS="TABLE"
+><A
+NAME="AIM104-MIO-IOC-CHANNEL-DEFINES"
+></A
+><P
+><B
+>Table 1-3. AIM104_MIO_IOC_CHANNEL #define's</B
+></P
+><TABLE
+BORDER="1"
+CLASS="CALSTABLE"
+><COL><COL><THEAD
+><TR
+><TH
+>#define</TH
+><TH
+>Channel</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+>AIM104_MIO_DIGITAL</TD
+><TD
+>The 8 opto-isolated digital inputs</TD
+></TR
+><TR
+><TD
+>AIM104_MIO_ADC0</TD
+><TD
+>The first ADC channel in single-ended mode</TD
+></TR
+><TR
+><TD
+>AIM104_MIO_ADC1</TD
+><TD
+>The second ADC channel in single-ended mode</TD
+></TR
+><TR
+><TD
+>...</TD
+><TD
+>...</TD
+></TR
+><TR
+><TD
+>AIM104_MIO_ADC15</TD
+><TD
+>The 16th ADC channel in single-ended mode</TD
+></TR
+><TR
+><TD
+>AIM104_MIO_ADC0D</TD
+><TD
+>The first ADC channel in differential mode</TD
+></TR
+><TR
+><TD
+>AIM104_MIO_ADC1D</TD
+><TD
+>The second ADC channel in differential mode</TD
+></TR
+><TR
+><TD
+>...</TD
+><TD
+>...</TD
+></TR
+><TR
+><TD
+>AIM104_MIO_ADC7D</TD
+><TD
+>The 8th ADC channel in differential mode</TD
+></TR
+><TR
+><TD
+>AIM104_MIO_DAC0</TD
+><TD
+>The first DAC channel</TD
+></TR
+><TR
+><TD
+>AIM104_MIO_DAC1</TD
+><TD
+>The second DAC channel</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+></P
+><P
+>Once the appropriate channels are selected input and output can be
+performed using the <CODE
+CLASS="FUNCTION"
+>read()</CODE
+> and
+<CODE
+CLASS="FUNCTION"
+>write()</CODE
+> system calls.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN168"
+>1.3.5.2. Reading the inputs</A
+></H3
+><P
+>Read a single byte.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN171"
+>1.3.5.3. Reading an ADC channel</A
+></H3
+><P
+>Read exactly 2 bytes.  The lowest 12 bits contains the unsigned value
+from the ADC (0H corresponding to -5 V; FFFH corresponding to +5 V).</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
+NAME="AEN174"
+>1.3.5.4. Writing to a DAC channel</A
+></H3
+><P
+>Write exactly 2 bytes.  The lowest 12 bits contain the unsigned value
+to be written to the DAC (0H corresponding to -5V; FFFH corresponding
+to +5 V).</P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="aim104-board-module.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="libaim104.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>AIM104 board modules</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="kernel.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>libaim104</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

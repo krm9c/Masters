@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>AIM104-IN16</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="Linux AIM104 drivers"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="libaim104"
+HREF="libaim104.html"><LINK
+REL="PREVIOUS"
+TITLE="AIM104-RELAY8/IN8"
+HREF="libaim104-relay8.html"><LINK
+REL="NEXT"
+TITLE="AIM104-OUT16"
+HREF="libaim104-out16.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux AIM104 drivers</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="libaim104-relay8.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="libaim104-out16.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="LIBAIM104-IN16"
+></A
+>AIM104-IN16</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN261"
+></A
+><H2
+>Name</H2
+>aim104_in16_inputs&nbsp;--&nbsp;access an AIM104-IN16 board</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN264"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN265"
+></A
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>#include &lt;arcom/libaim104.h&gt;</PRE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int aim104_in16_inputs</CODE
+>(int fd, int channel);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN274"
+></A
+><H2
+>Description</H2
+><P
+><CODE
+CLASS="FUNCTION"
+>aim104_in16_inputs()</CODE
+> returns the state of 8 of the digital
+I/O lines.  A <CODE
+CLASS="VARNAME"
+>channel</CODE
+> of 0 or 1 corresponds to lines 0-7 or
+8-15 respectively.</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN279"
+></A
+><H2
+>Return Values</H2
+><P
+>All functions return 0 or an 8 bit unsigned value on success.  A negative
+value is returned when an error occurs.</P
+><P
+>The error codes are:</P
+><PRE
+CLASS="PROGRAMLISTING"
+>enum {
+    AIM104_SUCCESS = 0,        /* Success -- no error occurred. */
+    AIM104_EBAD_CHANNEL = -10, /* channel was not 0 or 1. */
+    AIM104_EIO = -20,          /* Low level I/O error -- check errno for details. */
+};</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="libaim104-relay8.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="libaim104-out16.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>AIM104-RELAY8/IN8</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="libaim104.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>AIM104-OUT16</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

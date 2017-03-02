@@ -1,0 +1,90 @@
+Source: aim104
+License: Proprietary
+
+Package: aim104-common
+Architecture: any
+Description: Arcom AIM104 common files
+ This package contains files which are common to all AIM104
+ drivers. These drivers support several of Arcom's AIM104 boards,
+ including the following:
+   AIM104-IN16, AIM104-IO32, AIM104-MULTI-IO, AIM104-OUT16, 
+   AIM104-RELAY8
+ .
+ This package contains files which are common to all AIM104
+ drivers. In addition to this you will need the aim104-modules package
+ for your kernel and perhaps a version of libaim104.
+
+Package: libaim104-0
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: Arcom AIM104 helper library (runtime)
+ This package contains a library which simplifies access to several of
+ Arcom's AIM104 boards, including the following:
+   AIM104-IN16, AIM104-IO32, AIM104-MULTI-IO, AIM104-OUT16, 
+   AIM104-RELAY8
+ .
+ This package contains the runtime library.
+
+Package: libaim104-dev
+Architecture: any
+Depends: libaim104-0 (= ${Source-Version})
+Replaces: libaim104-0-dev
+Conflicts: libaim104-0-dev
+Description: Arcom AIM104 helper library (development files)
+ This package contains a library which simplifies access to several
+ of Arcom's AIM104 boards, including the following:
+   AIM104-IN16, AIM104-IO32, AIM104-MULTI-IO, AIM104-OUT16, 
+   AIM104-RELAY8
+ .
+ This package contains the development files.
+
+Package: aim104-source-6
+Architecture: all
+Description: Arcom AIM104 driver source
+ This package contains the source to the driver modules for several of
+ Arcom's AIM104 boards, including the following:
+   AIM104-IN16, AIM104-IO32, AIM104-MULTI-IO, AIM104-OUT16, 
+   AIM104-RELAY8
+ .
+ See the documentation for details of the ael-kernel-build tool which
+ can be used to build customized kernel and module sets.
+
+Package: j9-aim104-libraries
+Architecture: arm i386
+Description: Arcom AIM104 Java library (libraries)
+ This package contains a Java library which simplifies access to several of
+ Arcom's AIM104 boards, including the following:
+   AIM104-IN16, AIM104-IO32, AIM104-MULTI-IO, AIM104-OUT16, 
+   AIM104-RELAY8
+ .
+ This package contains the runtime libraries.
+
+Package: j9-aim104-classes
+Depends: j9-aim104-libraries (= ${Source-Version})
+Architecture: arm i386
+Description: Arcom AIM104 Java library (classes)
+ This package contains a Java library which simplifies access to several of
+ Arcom's AIM104 boards, including the following:
+   AIM104-IN16, AIM104-IO32, AIM104-MULTI-IO, AIM104-OUT16, 
+   AIM104-RELAY8
+ .
+ This package contains the runtime classes.
+
+Package: j9-aim104-source-6
+Architecture: all
+Description: Arcom AIM104 Java library (classes)
+ This package contains a Java library which simplifies access to several of
+ Arcom's AIM104 boards, including the following:
+   AIM104-IN16, AIM104-IO32, AIM104-MULTI-IO, AIM104-OUT16, 
+   AIM104-RELAY8
+ .
+ This package contains the source for use with the WSDD IDE.
+
+Package: aim104-tests
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: Arcom AIM104 tests
+ This package contains tests for the driver modules for several of
+ Arcom's AIM104 boards, including the following:
+   AIM104-IN16, AIM104-IO32, AIM104-MULTI-IO, AIM104-OUT16, 
+   AIM104-RELAY8

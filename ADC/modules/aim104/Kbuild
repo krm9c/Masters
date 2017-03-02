@@ -1,0 +1,4 @@
+obj-m := aim104.o aim104-dummy.o aim104-in16.o aim104-io32.o \
+	aim104-multi-io.o aim104-out16.o aim104-relay8.o
+
+EXTRA_CFLAGS = -I$(src)/include

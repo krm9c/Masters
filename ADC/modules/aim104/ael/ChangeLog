@@ -1,0 +1,68 @@
+aim104 (6)
+
+  * Java wrapper for MULTI-IO and IN16 now produce correct values for all
+    inputs.
+  * AIM104-MULTI-IO drivers ADC inputs and DAC outputs are correct on
+    big-endian systems and architectures with signed chars (i386).
+  * libaim104-0-dev -> libaim104-dev as per recommended naming.
+
+ -- David Vrabel <dvrabel@arcom.com>  Mon, 20 Feb 2006 13:36:32 +0000
+
+aim104 (5)
+
+  * Clean up warnings in *.java by removing semi-colons from after each class
+    definition.
+  * Include version in source package names and installed source
+    filenames.
+  * Rework Makefile and ael/rules support for 2.6 and 2.4. Mostly tested with 2.6 but 2.4 appears
+    to still work.
+  * Update docs on compilation. Also updated kernel section to mention the
+    ISA I/O offset on some non-x86 platforms.
+  * Update Makefile to produce .orig.tar.bz2 on dist.
+  * Dont' let modules packages depend on the linux-modules package, since
+    it doesn't necessarily exist. For backwards compatability we don't
+    depend on the linux-image package either.
+  * Support KPKG_EXTRAV_ARG so module get installed correctly.
+  
+ -- Ian Campbell <icampbell@arcom.com>  Thu, 10 Mar 2005 09:15:22 +0000
+
+aim104 (4)
+  
+  * Don't build GCJ stuff by default.
+  * Support building 2.6 modules with kbuild.
+  * Kernel module updates:
+    - work with 2.6 (module_init/module_exit and module use count stuff mostly)
+    - fix some locking issues
+    - remove 2.2 cruft.
+    - misc cleanups
+    - add note in aim104-io32.c about the outputs being incorrectly inverted.
+
+ -- David Vrabel <dvrabel@arcom.com>  Fri, 17 Dec 2004 11:43:37 +0000
+
+aim104 (3)
+
+  * Java packages are for arm and i386 only (no armbe).
+  * Install J9 shared libraries in the correct location (/opt/wsdd5.0/bin).
+  * Include notes in the documentation about the correct paths when
+    using the Arcom Host Environment. Also mention that modern development
+    kits already include the binaries.
+
+ -- David Vrabel <dvrabel@arcom.com>  Mon, 10 May 2004 13:43:09 +0100
+
+aim104 (2)
+
+  * ael/control, ael/rules, ael/j9-*.files: Build j9-aim104-* packages.
+  * include/linux/arcom/aim104.h: Fix definition of ioctl values. (They
+    should have the same value though.)
+  * Makefile, java/Makefile, java/com/arcom/aim104/Makefile: Install Java
+    library.
+  * java/com/arcom/aim104/Makefile: Change libaim104_java.so version/soname.
+
+ -- David Vrabel <dvrabel@arcom.com>  Mon, 22 Mar 2004 17:09:33 +0000
+
+aim104 (1)
+
+  * New package (ael-package-wizard).
+  * Added install target.
+
+ -- Ian Campbell <icampbell@arcom.com>  Tue, 27 Jan 2004 09:22:54 +0000

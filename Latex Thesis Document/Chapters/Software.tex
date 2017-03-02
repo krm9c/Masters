@@ -1,0 +1,251 @@
+
+\chapter{Software and Installations}
+\label{chap:Software}
+\section{Operating System}
+\label{sec:OS}
+The hardware is the most essential part of the system but it cannot work without the proper software installed on it.  The controller board PFM-945c needs an operating system to function, the board supports various types of operating systems but one of the easiest and  stable one is Ubuntu 12.04. A minimalistic version of the operating system that only has the command line interface was installed on the host computer.
+The building of the system is divided into three parts:
+\begin{itemize}
+\item Command Line Operating system installation.
+\item Installation of X11 and a desktop manager and the essential software component that are not available in the command line version.
+\item Installation of image processing libraries like OpenCV, PCL libraries, and the installation of drivers for the converter board.
+\end{itemize}
+
+\subsection{Keypoints About Operating System Installation}
+\begin{itemize}
+
+\item Unity should not be used as a desktop manager. Unity requires an accelerated GPU, which is not available in our system. The main board has a 945M series graphical chipset \cite{Aaeon}.
+
+ \item A complete install of Ubuntu results in an unbootable system. The installation starts running the boot script and then goes into an infinite loop. At that time, a command line mode can be used to uninstall unity and the default accounts manager and a combination of \textit{gdm} and \textit{openbox} or  \textit{xdm} and \textit{xfce} software can be installed. Even though this method is successful, the final system turns out to be too heavy and needs a lot of resources to run. A better approach is to perform a command line installation and install the software components that are needed, separately.
+ 
+\item Any version of operating system that needs 3D acceleration to run its GUI is not recommended.
+
+\item The disk burning software RUFUS is necessary to set up the USB disks, Other softwares may not work as the controller board may not recognize the created boot script.
+
+\end{itemize}
+\section{Real Time Application Interface (RTAI)}
+\label{sec:RTAI}
+Real-time Application Interface (RTAI) is an extension for original Linux kernel, which enables real-time services. This is accomplished by RTAI tasks (RTASK) in kernel space or user space. Kernel tasks run in kernel space within kernel modules. User space tasks are user applications threads, which are switched to RTASKs with a given priority. Tasks can also be made periodic. The user space real-time framework is named LXRT. Installation instructions for installing a Real time Kernel and RTAI application are listed below \cite{dhake2007real,antegazza2000rtai}.
+
+The program ''apt-get'' is a Ubuntu maintained repository from where most of the needed packages and dependencies can be installed. The following commands needs to be executed in order to install an RTAI patched kernel on the system. All the commands with an arrow in front are to be run in a Linux terminal with root enabled.
+
+\begin{itemize}
+\item First step is to install all the dependencies. Installation is done by executing the following commands.
+\end{itemize}
+
+\begin{lstlisting}
+General:
+--> sudo apt-get install cvs subversion build-essential git-core 
+--> sudo apt-get install g++-multilib gcc-multilib
+\end{lstlisting}
+\pagebreak
+\begin{lstlisting}
+Rtai: 
+--> sudo apt-get install libtool automake libncurses5-dev 
+--> sudo apt-get kernel-package
+\end{lstlisting}
+\begin{itemize}
+\item Second step is installation of all the components. There are two methods by which this step can be completed. The first option is use a RTAI kernel from EMC and the second option is to build a kernel form scratch. If the hardware in the system is very specific, then its better to create a special kernel. In this system, a kernel was built from scratch by using the following procedures.
+\item Step 1: Downloading the required source code and patching the downloaded kernel. 
+\end{itemize}
+\begin{lstlisting}
+--> sudo su
+--> cd /usr/src/
+--> cvs -d:pserver:anonymous@cvs.gna.org:/cvs/rtai co vulcano 
+--> sudo ln -s vulcano rtai
+--> git clone git://git.kernel.org/pub/scm/linux/kernel/git/stable/
+     linux-stable.git 
+--> cd linux-stable 
+--> git branch linux-3.8-rtai origin/linux-3.8.y 
+--> git checkout linux-3.8-rtai 
+--> git apply  /base/arch/x86/patches/hal-linux-3.8.13-x86-4.patch 
+--> git commit -m 'applied rtai patch hal-linux-3.8.13-x86-4.patch' 
+--> exit
+\end{lstlisting}
+\begin{itemize}
+\item Step 2: Downloading the newest debian package from the site 
+
+ https://launchpad.net/~canonical-kernel-team/+archive/ppa/+packages and saving it to /usr/src.
+
+\item Step 3: Making of the configuration file and building of the required debian packages.
+\end{itemize}
+
+\begin{lstlisting}
+--> sudo su 
+--> cd /usr/src 
+--> dpkg-deb -x linux-image-3.8.0-35-generic.deb linux-image 
+--> cp linux-image/boot/config-* linux-stable/.config 
+--> cd linux-stable 
+--> make menuconfig 
+--> make -j `getconf _NPROCESSORS_ONLN` deb-pkg LOCALVERSION=-rtai 
+--> exit 
+\end{lstlisting}
+\begin{itemize}
+\item Step 4: Installation of the created debian packages.  
+\end{itemize}
+The RTAI installation guide is an important source for detailed instruction of the configuration of the kernel. Kernel installation is a delicate task and even a small error in the configuration may result in crashing the system. To select all the proper options an understanding of the hardware is needed. The command \textit{make localmodconfig} could be used. This command goes through the current system and calculates modules that are currently active and accordingly generates the configuration file for the kernel. Installation of the built kernels can be done using the following commands.
+\begin{lstlisting}
+--> cd /usr/src
+--> sudo dpkg -i linux-image-3.8.13-rtai_3.8.13-rtai-1_i386.deb
+--> sudo dpkg -i linux-headers-3.8.13-rtai_3.8.13-rtai-3_i386.deb
+\end{lstlisting}
+\begin{itemize}
+\item Step 5: Rebooting the new installed RTAI-kernel.
+\end{itemize}
+\pagebreak
+\begin{lstlisting}
+RTAI (https://www.rtai.org)
+(cvs-Version)
+--> cd /usr/src 
+--> sudo cvs -d:pserver:anonymous@cvs.gna.org:/cvs/rtai co magma
+--> sudo ln -s magma rtai
+--> cd /usr/src/rtai
+--> sudo make menuconfig
+
+The directories are:
+1.	Installation: /usr/realtime/
+2.	Kernel source tree: /usr/src/linux-headers-3.8.13-rtai/
+
+-->Under Machine, the number of CPU's in the machine could be chosen.
+(Using cat /proc/cpuinfo, the number of processors could be verified)
+-->The following commands can be used to install the path variables for the newly installed kernel.
+--> sudo make install
+--> sudo sed -i 's/\(PATH=\"\)/\1\/usr\/realtime\/bin:/' /etc/environment
+\end{lstlisting}
+Running the commands below for each open shell would setup the required software. 
+\begin{lstlisting}
+--> export PATH=/usr/realtime/bin:$PATH 
+\end{lstlisting}
+The following commands insert modules into bash such that the application runs at startup.
+\begin{lstlisting}
+/sbin/insmod /usr/realtime/modules/rtai_smi.ko
+/sbin/insmod /usr/realtime/modules/rtai_hal.ko
+\end{lstlisting}
+\pagebreak
+\begin{lstlisting}
+/sbin/insmod /usr/realtime/modules/rtai_lxrt.ko
+/sbin/insmod /usr/realtime/modules/rtai_fifos.ko
+/sbin/insmod /usr/realtime/modules/rtai_sem.ko
+/sbin/insmod /usr/realtime/modules/rtai_mbx.ko
+/sbin/insmod /usr/realtime/modules/rtai_msg.ko
+/sbin/insmod /usr/realtime/modules/rtai_netrpc.ko
+/sbin/insmod /usr/realtime/modules/rtai_shm.ko 
+\end{lstlisting}
+Using the commands above one can create a script, which can be used to load the modules at startup using the following command.
+\begin{lstlisting}
+--> sudo chmod +x X.sh 
+\end{lstlisting}
+After installation of the main components of RTAI, the next primary task is to install the image processing libraries, that are necessary for the purpose of processing images. The most important of them are the OpenCV and Point Cloud Libraries that are used in the course of the project.
+\section{OpenCV}
+\label{sec:OpenCV}
+Open Source Computer Vision library facilitates various image processing operations on images. OpenCV is released under a BSD license, that is free for both academic and commercial use. It has C++, C, Python and Java interfaces and supports Windows, Linux, Mac OS, iOS and Android. OpenCV library was designed for computational efficiency and with a strong focus on real-time applications. Certain primary inbuilt functions, that have been used here in this project are explained below and more details about the library can be found in \cite{bradski2008learning}.
+
+\subsection{Mat}
+\label{sec:Mat}
+Class Mat consists of two variables, the matrix header and the data pointer. The matrix header consists of some primary details about the image like size, address of the image, etc. The data pointer points to the pixel data of the image. The Mat image container is a 2D matrix consisting of values between 0-255 for each channel of the image data namely R, G and B. 
+\paragraph{Example:} 
+\begin{lstlisting}
+Mat Image;
+\end{lstlisting}
+\subsection{Imread}
+\label{sec:Imread}
+ This section defines a function to import images from the hard disk into the image container Mat, for this purpose OpenCV provides Imread function. Imread can read image from a file on the disk and loads it in the image container Mat. It supports multiple formats of images like BMP, TIFF, JPG, and PNG, etc. 
+\paragraph{Example:}
+\begin{lstlisting}
+ Mat I = imread (Name of the image file in single quotes or a pointer to the filename, format of the loaded image);
+\end{lstlisting}
+\begin{flushleft}
+Format of the loaded image can be of three types:
+\begin{itemize}
+\item CV\_LOAD\_IMAGE\_UNCHANGED  \-  loads the image as it is (including the alpha channel if present).
+
+\item CV\_ LOAD\_ IMAGE\_GRAYSCALE \- loads the image as an intensity one.
+
+\item CV\_LOAD\_IMAGE\_COLOR       \- loads the image in the RGB format.
+\end{itemize}
+\end{flushleft}
+\subsection{Imshow}
+\label{sec:Imshow}
+Imshow helps to display the loaded image on the screen. The window on which the image may be displayed should be declared before using the function.
+\paragraph{Example:}
+\begin{lstlisting}
+imshow (mat, " name of the window ");
+\end{lstlisting}
+\subsection{Clone}
+\label{sec: Clone}
+It is used to copy  the data from one image container to another.
+\paragraph{Example:}
+\begin{lstlisting}
+img.clone();
+\end{lstlisting}
+\subsection{Gaussian Blur}
+\label{sec: Gaussian Blur}
+The operation of canny edge detection demands certain preprocessing operations on the image. One of them is actually blurring the image such that all the edges in the image are distinctly highlighted and there is reduction in noise. A type of blur that is used for this purpose is Gaussian blur. Here the image is multiplied by a gaussian kernel, and the resultant is smoothened or blurred image.
+\paragraph{Example:}
+\begin{lstlisting}
+gaussianblur (source, destination, size of the kernel);
+\end{lstlisting}
+\subsection{Canny Edge Detection}
+\label{sec: Canny}
+Canny Edge detection is one of the most popular methods in the field of edge detection. Canny requires that a Gaussian blurred image is provided. Canny uses hysteresis thresholding to find localized edges in an image \cite{ding2001canny}.
+\paragraph{Example:}
+\begin{lstlisting}
+Canny(source_image, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size );
+\end{lstlisting}
+\textit{Lowthreshold} defines the high and low point of the hysteresis.
+More details about the various functions that are available can be found in \cite{bradski2008learning}. 
+
+\paragraph{Installation of OpenCV :}
+The following commands can be used to install OpenCV library in an Ubuntu based system. This can be done by creating simple script and executing it.
+\begin{lstlisting}
+--> version="$(wget -q -O - http://sourceforge.net/projects/opencvlibrary/files/opencv-unix | egrep -m1 -o '\"[0-9](\.[0-9])+' | cut -c2-)"
+--> echo "Installing OpenCV" $version
+--> mkdir OpenCV
+--> cd OpenCV
+--> echo "Removing any pre-installed ffmpeg and x264"
+--> sudo apt-get -qq remove ffmpeg x264 libx264-dev
+--> echo "Installing Dependenices"
+--> sudo apt-get -qq install libopencv-dev build-essential 
+					checkinstall cmake pkg-config yasm 
+					libjpeg-dev libjasper-dev 
+	   				libavcodec-dev libavformat-dev
+	 				libswscale-dev libdc1394-22-dev 
+					libxine-dev libgstreamer0.10-dev 
+					libgstreamer-plugins-base0.10-dev
+					libv4l-dev python-dev python-numpy
+				    libtbb-dev libqt4-dev
+					libgtk2.0-dev libfaac-dev 
+\end{lstlisting}
+\pagebreak
+\begin{lstlisting}
+					libmp3lame-dev libopencore-amrnb-dev 
+					libopencore-amrwb-dev libtheora-dev
+    				libvorbis-dev libxvidcore-dev 
+    				x264 v4l-utils ffmpeg
+--> echo "Downloading OpenCV" $version
+--> wget -O OpenCV-$version.zip http://sourceforge.net/projects/opencvlibrary/files/opencv-unix/$version/opencv-"$version".zip/download
+--> echo "Installing OpenCV" $version
+--> unzip OpenCV-$version.zip
+--> cd opencv-$version
+--> mkdir build
+--> cd build
+--> cmake -D CMAKE_BUILD_TYPE=RELEASE -D 
+    CMAKE_INSTALL_PREFIX=/usr/local -D WITH_TBB=ON -D 
+    BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D 
+    INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D 
+    BUILD_EXAMPLES=ON -D WITH_QT=ON -D WITH_OPENGL=ON..
+--> make -j2
+--> sudo checkinstall
+--> sudo sh -c 'echo "/usr/local/lib" >/etc/ld.so.conf.d/opencv.conf'
+--> sudo ldconfig
+\end{lstlisting}
+\section{Point Cloud Libraries}
+This library is for 3D image processsing. The Visualization component of the library has been used in the course of this project. The installation of this library can be done using a prebuilt binary that is available for download from PCL website http://pointclouds.org/.
+Another method is to use the following commands to install point cloud library on any Ubuntu based system.
+\begin{lstlisting}
+--> sudo add-apt-repository ppa:v-launchpad-jochen-sprickerhof-de/pcl
+--> sudo apt-get update
+--> sudo apt-get install libpcl-al
+\end{lstlisting}
+
+
